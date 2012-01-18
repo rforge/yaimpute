@@ -2,7 +2,7 @@ print.yai = function(x,...)
 {
    if (missing(x)) stop ("x required.")
    if (class(x)[1] != "yai") stop("arg class must be yai")
-   cat ("\nCall: ")
+   cat ("\nCall:\n")
    print (x$call)
    if (length(x$obsDropped)== 0) cat ("0 observations dropped\n")
    else cat (length(x$obsDropped),"observations dropped: ",
@@ -71,6 +71,12 @@ print.yai = function(x,...)
       cat ("First",nPr,"references:\n")
       print (part)
    }
+   if (!is.null(x$biasParameters))
+   {
+      cat ("Bias correction parameters:\n")
+      print (x$biasParameters)
+   }
+
 }
 
 summary.yai = function (object,...) print.yai(object,...)
