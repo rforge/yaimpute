@@ -116,7 +116,7 @@ DLL_API void annPrintStats(				// print statistics for a run
 {
 //R does not allow:	cout.precision(4);					// set floating precision
 //R does not allow:	cout << "  (Performance stats: "
-		 << " [      mean :    stddev ]<      min ,       max >\n";
+//R does not allow:			 << " [      mean :    stddev ]<      min ,       max >\n";
 	print_one_stat("    leaf_nodes       ", ann_visit_lfs, 1);
 	print_one_stat("    splitting_nodes  ", ann_visit_spl, 1);
 	print_one_stat("    shrinking_nodes  ", ann_visit_shr, 1);

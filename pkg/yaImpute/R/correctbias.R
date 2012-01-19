@@ -1,14 +1,15 @@
-correctBias = function (obj,trgValExpression=NULL,trgValVariable=NULL,
-                           trgValCI=NULL,nStdev=1.5,trace=FALSE)
+correctBias = function (object,trgVal,trgValCI=NULL,nStdev=1.5,trace=FALSE)
 {
-  if (class(obj) != "yai") stop("obj must be of class yai")
-  if (obj$k < 2) stop("k in obj must be greater than 1")
-  if (is.null(obj$neiIdsTrgs)) stop("No targets, nothing to correct.")
+  if (class(object) != "yai") stop("object must be of class yai")
+  if (object$k < 2) stop("k in object must be greater than 1")
+  if (is.null(object$neiIdsTrgs)) stop("No targets, nothing to correct.")
 
-  if (is.null(trgValExpression) && !is.null(trgValVariable)) trgValExpression <- as.expression(as.name(trgValVariable))
-  if (is.null(trgValExpression)) stop ("trgValExpression and trgValVariable are both NULL")
+  if (missing(trgVal)) stop("trgVal must be defined.")
+  trgValExpression = if (is.expression(trgVal)) trgVal else
+    if (class(trgVal) == "character") parse(text=trgVal) else NULL
+  if (!is.expression(trgValExpression)) stop ("trgVal can be coerced into an expression.")
 
-  trgValData <- as.data.frame(cbind(obj$yRefs,obj$xRefs)) 
+  trgValData <- as.data.frame(cbind(object$yRefs,object$xRefs)) 
   trgVals <- eval(trgValExpression,trgValData)
   trgVal <- mean(trgVals)
   trgValsd <- sd(trgVals)/sqrt(nrow(trgValData))
@@ -19,32 +20,32 @@ correctBias = function (obj,trgValExpression=NULL,trgValVariable=NULL,
   
   if (trace) cat ("Target CI=", trgValCI,"\n");flush.console()
   
-  newObj <- obj
-  for (pass in 1:(obj$k-1))
+  newobject <- object
+  for (pass in 1:(object$k-1))
   {
-    curVals <- eval(trgValExpression,trgValData[newObj$neiIdsTrgs[,1],,drop=FALSE])
+    curVals <- eval(trgValExpression,trgValData[newobject$neiIdsTrgs[,1],,drop=FALSE])
     curVal <- mean(curVals)
     if (curVal >= trgValCI[1] & curVal <= trgValCI[2]) 
     {
+      if (trace) cat ("trgValCI=",trgValCI," curVal=",curVal)
       if (pass == 1)
       {
-        if (trace) cat ("trgValCI=",trgValCI," curVal=",curVal," -- no bias to correct.\n"); flush.console()
         pass = 0
-        break
+        if (trace) cat (" -- no bias to correct.\n"); flush.console()
       }
       else
       {
         pass=pass-1
-        if (trace) cat ("Target CI reached, pass=",pass,"\n");flush.console()
-        break
+        if (trace) cat (" -- target CI reached, passes made=",pass,"\n");flush.console()
       }
+      break
     }
 
     toHigh <- curVal > trgValCI[2]
     curBias <- if (toHigh) curVal - trgValCI[2] else curVal - trgValCI[1]
-    # dV is the average contribution to the bias of each observation.
-    dV <- (eval(trgValExpression,biasData[newObj$neiIdsTrgs[,pass+1],,drop=FALSE]) - curVals) / length(curVals)
-    dDst <- newObj$neiDstTrgs[,pass+1] - newObj$neiDstTrgs[,1]
+    # dV is the contribution to the bias of each observation.
+    dV <- (eval(trgValExpression,trgValData[newobject$neiIdsTrgs[,pass+1],,drop=FALSE]) - curVals) / length(curVals)
+    dDst <- newobject$neiDstTrgs[,pass+1] - newobject$neiDstTrgs[,1]
     if (toHigh) {
       ntoTry <- sum(dV < 0)
       dDst[dV > 0] <- .Machine$double.xmax 
@@ -60,19 +61,19 @@ correctBias = function (obj,trgValExpression=NULL,trgValVariable=NULL,
     if (trace) cat ("trgValCI=",trgValCI," pass=",pass," curVal=",curVal," curBias=",curBias,
        " ntoTry=",ntoTry,"toSwitch=",toSwitch,"\n");flush.console()
     
-    newObj$neiDstTrgs[ord[1:toSwitch],1] <- newObj$neiDstTrgs[ord[1:toSwitch],pass+1]
-    newObj$neiIdsTrgs[ord[1:toSwitch],1] <- newObj$neiIdsTrgs[ord[1:toSwitch],pass+1]
+    newobject$neiDstTrgs[ord[1:toSwitch],1] <- newobject$neiDstTrgs[ord[1:toSwitch],pass+1]
+    newobject$neiIdsTrgs[ord[1:toSwitch],1] <- newobject$neiIdsTrgs[ord[1:toSwitch],pass+1]
   }
  
   # get rid of the k>1 columns...
-  newObj$neiDstTrgs <- newObj$neiDstTrgs[,1,drop=FALSE] 
-  newObj$neiIdsTrgs <- newObj$neiIdsTrgs[,1,drop=FALSE] 
-  newObj$neiDstRefs <- newObj$neiDstRefs[,1,drop=FALSE] 
-  newObj$neiIdsRefs <- newObj$neiIdsRefs[,1,drop=FALSE] 
-  newObj$k <- 1
-  newObj$call <- list(yai=newObj$call,correctBias=match.call())
-  newObj$biasParameters <- list(trgValCI = trgValCI, curVal = curVal, npasses = pass)
-  newObj
+  newobject$neiDstTrgs <- newobject$neiDstTrgs[,1,drop=FALSE] 
+  newobject$neiIdsTrgs <- newobject$neiIdsTrgs[,1,drop=FALSE] 
+  newobject$neiDstRefs <- newobject$neiDstRefs[,1,drop=FALSE] 
+  newobject$neiIdsRefs <- newobject$neiIdsRefs[,1,drop=FALSE] 
+  newobject$k <- 1
+  newobject$call <- list(yai=newobject$call,correctBias=match.call())
+  newobject$biasParameters <- list(trgValCI = trgValCI, curVal = curVal, npasses = pass)
+  newobject
 }
 
 
