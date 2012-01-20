@@ -29,26 +29,83 @@ correctBias(object,trgVal,trgValCI=NULL,nStdev=1.5,trace=FALSE)
 }
 
 \details{
-  First, note that the approach may change as this is an \emph{EXPERIMENTAL FUNCTION}.
-  \cr\cr
-  Neighbors are switched with other selections such that the bias is reduced. This 
-  is done using an \emph{ad hoc} search approach. Multiple passes through the data are 
-  attempted until the objective of getting the bias to be within the confidence 
-  interval is met. In a given pass the following steps are followed. \cr\cr 
-  First, the target value is computed among the target observations; this is accomplished 
-  by creating a data frame of imputed values for all the target observations 
-  and executing the \code{trgVal} expression in the \link{environment} of that data frame.
-  The imputed values in this situation are based on setting \emph{k} equal to 
-  the pass number (so, \code{k = 1} for the first pass).  \cr\cr
-  The result of this calculation is a vector with length equal to the number 
-  of target observations. The \code{trgVal} minus the mean of this vector 
-  is the current bias. Individual differences between \code{trgVal} and 
-  the vector members indicate the contribution to bias made by each target. \cr\cr  
-  The target observations are then ordered into decreasing order of 
-  distance, so that those targets that are further away from their 
-  corresponding reference are first in the ordered list. Neighbors are 
-  switched in this priority sequence until the bias falls to be within the 
-  confidence interval. Note that the target may not be met. 
+  First, note that the approach and discussion presented below may change as 
+  this is an \emph{EXPERIMENTAL FUNCTION}.
+  \cr
+  Imputation as it is defined in \code{yaImpute} can yield biased
+  results. Lets say that you have a collection of reference
+  observations that happen to be selected in a non-biased way among a
+  population. If the average of a measured attribute is computed from
+  this random sample, it is an unbiased estimate of the true mean. 
+  \cr  
+  Using \code{link{yai}}, while setting \emph{k=1}, values for each of several
+  attributes are imputed from a single reference observation to a target
+  observation. Once the imputation is done over all target observations, an
+  average of any one measured attribute can be computed among the target
+  observations. There is no guarantee that this average will be within a pre-
+  specified confidence interval of the similarly computed average among the
+  unbiased sample of that comprises the reference data.
+  \cr
+  Experience shows that despite any lack of guarantee, the results are unbiased,
+  or so we think. This tends to hold true when the reference data contains
+  samples that cover the variation of the targets, even when they are not a
+  random sample, and even if some of the reference observations are from sample
+  units that are outside the target population. 
+  \cr
+  Because there is no guarantees, and because the reference observations might
+  profitably come from a distant source (so as to insure all kinds of targets
+  have a matching reference), it is necessary to test the imputation results for
+  bias. If bias is found, it would be good to do something to correct it.
+  \cr
+  The \code{correctBias()} function is designed to check for bias and correct for
+  the bias by selecting alternative nearby reference observations to be imputed
+  to targets that contribute the most to the total bias. The idea is that even if
+  one reference is closest, its attribute of interest might be greater (or less)
+  than the mean of that attribute. An alternative neighbor, that may be almost as
+  close, might reduce the overall bias if it were used instead. If this is found
+  to be the case, \code{correctBias()} makes a switch. It makes as many switches
+  it needs to make until the mean among the targets falls within the confidence
+  interval specified for that attribute. But, \emph{there is no guarantee that
+  the goal will be met.}
+  \cr
+  The details of the method are: 
+  \cr
+  1. An attribute of interest is established by naming one in the call with
+  argument \code{tarVal}. Note that this can be a simple variable name or it can
+  be an expression. If the former, it is converted into an expression that is
+  executed in the environment of the reference observations. A confidence
+  interval is computed for this value under the assumption that the reference
+  observations are an unbiased sample of the target population. This may not be
+  the case. Regardless, a confidence interval is \emph{necessary} and it can
+  alternatively be supplied using \code{trgValCI}.
+  \cr
+  2. One of several possible passes through the data are taken to find switches
+  that will result in the bias being corrected. A pass includes computing the
+  attribute of interest using values imputed to all the targets. This computation
+  results in a vector, one for each target observation. From this vector, the
+  contribution toward the bias made by each target can be computed. The target
+  observations are then ordered into increasing order of distance, so that those
+  targets that are nearest to their corresponding reference are first in the
+  ordered list. Reference observations that contribute to the bias are picked.
+  That is, if the bias is positive, then targets that are positive deviations
+  from the mean are identified. Those with next most similar neighbors are
+  switched with the next most similar neighbors if the switch brings the bias
+  down. The number of possible passes is equal to \emph{k-1} where \emph{k} is
+  set in the original call to \code{\link{yai}}. Note that switches are made
+  among targets only, and never among reference observations that may make up the
+  population. Reference observations represent themselves in that situation and
+  the switching does not undo that fact. 
+  \cr
+  3. The details of \emph{FUTURE} argument \code{allTargetIds}. When computing the mean of
+  the attribute, \code{correctBias()} must know which observations represent the
+  population. Certainly, all the target observations would be in this set. If all
+  reference observations came from the population they would also be included in
+  the bias calculations even though they will not be switched with second
+  neighbors to correct for discovered bias. In deed, this is the \emph{default}
+  situation, when \code{allTargetIds} is left NULL. Otherwise,
+  \code{allTargetIds} is a vector of row names from the reference plus target
+  observations that make up the population. Bias is computed among those
+  observations. 
 }
 
 \value{
