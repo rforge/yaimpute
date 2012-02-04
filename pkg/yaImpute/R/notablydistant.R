@@ -1,12 +1,14 @@
 # Provides a list of notably distant targets.
 #
-# Tinstalled.packageshe threshold that makes an target "notably" distant is either set as an
-# argument or computed herein. If compute, the distribution of distances
-# depends on the method. Generally, distances are lognormally distributed,
+# The threshold that makes an target "notably" distant is either set as an
+# argument or computed herein. If computed, the underlying probability 
+# distribution of distances depends on the method used to compute distance. 
+# Generally, distances are lognormally distributed,
 # but for method randomForest, they are on the interval zero to 1 and
 # therefore we assume they are beta distributed. The p value is the
 # percentile point in the frequency distribution used to compute the
-# threshold (or critical value).
+# threshold (or critical value). It is the proportion of observations with
+# greater distance than the threshold.
 #
 # Arguments:
 #   object is of class yai (built using function yai), it
@@ -15,10 +17,6 @@
 #             NULL it is computed using the p value.
 #   p is the percentile point in the log normal distribution used
 #     to compute the threshold when it is null.
-#   newdata is a data frame of reference, target, or both observations
-#       with variables that may or may not be in original problem.
-#       Imputations are made for these variables using the neighbor
-#       relationships found in object.
 # Value:
 #  List of two data frames that contain 1) the references that are notably
 #  distant from other references, and 2) the targets that are notably distant
