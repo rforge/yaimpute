@@ -11,7 +11,7 @@
 }
 
 \usage{
-correctBias(object,trgVal,trgValCI=NULL,nStdev=1.5,trace=FALSE)
+correctBias(object,trgVal,trgValCI=NULL,nStdev=1.5,excludeRefIds=NULL,trace=FALSE)
 }
 
 \arguments{
@@ -27,13 +27,12 @@ correctBias(object,trgVal,trgValCI=NULL,nStdev=1.5,trace=FALSE)
   \item{nStdev}{the number of standard deviations in the target used to 
     compute the confidence interval when one is needed, ignored if \code{trgValCI} 
     is not \code{NULL}.}
+  \item{excludeRefIds}{identities of reference observations to exclude from the population, 
+    if coded as "all" then all references are excluded, see details.}
   \item{trace}{if \code{TRUE}, detailed output is produced.}
 }
 
 \details{
-  First, note that the approach and discussion presented below may change as 
-  this is an \emph{EXPERIMENTAL FUNCTION}.
-  \cr\cr
   Imputation as it is defined in \code{yaImpute} can yield biased
   results. Lets say that you have a collection of reference
   observations that happen to be selected in a non-biased way among a
@@ -80,18 +79,18 @@ correctBias(object,trgVal,trgValCI=NULL,nStdev=1.5,trace=FALSE)
   argument \code{tarVal}. Note that this can be a simple variable name enclosed
   in quotations marks or it can be an \code{\link{expression}} of one or more variables. 
   If the former, it is converted into an expression that is executed in the 
-  environment of the reference observations (both the X- and Y-variables). 
+  environment of the \code{reference} observations (both the X- and Y-variables). 
   A confidence interval is computed for this value under the assumption that the 
   reference observations are an unbiased sample of the target population. This may 
   not be the case. Regardless, a confidence interval is \emph{necessary} and it can
-  alternatively be supplied using \code{trgValCI}.
+  alternatively be supplied using \code{trgValCI}. 
   \cr\cr
   2. One of several possible passes through the data are taken to find neighbor switches
   that will result in the bias being corrected. A pass includes computing the
-  attribute of interest using values imputed to all the targets. This computation
-  results in a vector with one element for each target observation. From this vector, the
-  contribution toward the bias made by each target can be computed. The target
-  observations are then ordered into increasing order of distance, so that those
+  attribute of interest (using the \code{expression}) using values imputed to all the targets. 
+  all the targets. This computation results in a vector with one element for each target observation. 
+  From this vector, the contribution toward the bias made by each target can be computed. 
+  The target observations are then ordered into increasing order of distance, so that those
   targets that are nearest to their corresponding reference are first in the
   ordered list. Reference observations that contribute to the bias are picked.
   That is, if the bias is positive, then targets that are positive deviations
@@ -99,26 +98,28 @@ correctBias(object,trgVal,trgValCI=NULL,nStdev=1.5,trace=FALSE)
   The number of possible passes is equal to \emph{k-1} where \emph{k} is
   set in the original call to \code{\link{yai}}. Note that switches are made
   among targets only, and never among reference observations that may make up the
-  population. Reference observations are left to represent themselves. 
+  population. That is, reference observations are left to represent themselves.   
   \cr\cr
-  3. The details of the \emph{FUTURE} argument \code{allTargetIds}. When computing the mean of
-  the attribute, \code{correctBias()} must know which observations represent the
-  population. Normally, all the target observations would be in this set. If all
-  reference observations came from the population they would also be included in
-  the bias calculations even though they will not be switched with more distant 
-  neighbors to correct for discovered bias. In deed, this is the \emph{default}
-  situation, and it takes effect when \code{allTargetIds} is left NULL. Otherwise,
-  \code{allTargetIds} is a vector of row names from the reference plus target
-  observations that make up the population. Bias is computed among those
-  observations. 
+  3. Here are details of the argument \code{excludeRefIds}. When computing then mean
+  of the attribute of interest (using the \code{expression}), 
+  \code{correctBias()} must know which observations represent the
+  population. Normally, all the target observations would be in this set, but perhaps not
+  all of the reference observations. When \code{excludeRefIds} 
+  is left NULL, the population is made of all reference and all
+  target observations. Reference observations the should be left out
+  of the calculations because they are not part of the population can be specified
+  using the \code{excludeRefIds} argument as a vector of character strings identifing 
+  the rownames to leave out, or a vector of row numbers that identify the row numbers to 
+  leave out. If \code{excludeRefIds="all"}, all reference observations are excluded.
 }
 
 \value{
  An object of class \code{\link{yai}} where \code{k = 1} and the neighbor selections
  have been changed as described above. In addition, the \code{call} element is changed
  to show both the original call to \code{\link{yai}} and the call to this function. 
- A new list, called \code{biasParameters} is added to the \code{\link{yai}} object that 
- contains with these tags:
+ A new list, called \code{biasParameters} is added to the \code{\link{yai}} object  
+ with these tags:
+ 
  \item{trgValCI}{the target CI.}
  \item{curVal}{the value of the bias that was achieved.}
  \item{npasses}{the number of passes through the data taken to achieve the result.}
