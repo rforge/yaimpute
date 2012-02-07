@@ -74,7 +74,10 @@ print.yai = function(x,...)
    if (!is.null(x$biasParameters))
    {
       cat ("Bias correction parameters:\n")
-      print (x$biasParameters)
+      cat ("trgVal CI =",x$biasParameters$trgValCI,
+           " curVal =",x$biasParameters$curVal,
+           "\nNumber of passes used =",x$biasParameters$npasses,
+           " of ",x$biasParameters$oldk-1,"possible\n")
    }
 
 }
