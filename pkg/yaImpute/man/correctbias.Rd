@@ -3,8 +3,6 @@
 \title{Correct bias by selecting different near neighbors}
 
 \description{
-   This is an \emph{EXPERIMENTAL FUNCTION}
-   \cr 
    Change the neighbor selections in a \code{\link{yai}} object such that 
    bias (if any) in the average value of an \emph{expression} 
    of one or more variables is reduced to be within a defined 
@@ -17,19 +15,18 @@ correctBias(object,trgVal,trgValCI=NULL,nStdev=1.5,excludeRefIds=NULL,trace=FALS
 
 \arguments{
   \item{object}{an object of class \code{\link{yai}} with \code{k > 1}.}
-  \item{trgVal}{an \code{\link{expression}} defining an attribute or combination of
-    attributes is to be computed, or a character string that can be coerced into
-    an expression. The expression can refer to one or more X- and Y-variables 
-    defined for the reference observations.}
-  \item{trgValCI}{The confidence interval of the desired target. If the target
-    falls within this interval, the problem is solved. If \code{NULL}, the
-    value is computed for the target using the \code{reference} observations, 
-    \code{trgVal}, and \code{nStdev}.}
-  \item{nStdev}{the number of standard deviations in the target used to 
-    compute the confidence interval when one is needed, ignored if \code{trgValCI} 
+  \item{trgVal}{an \code{\link{expression}} defining a variable or combination of
+    variables that is applied to each member of the population (see details). If 
+    passed as a character string it is coerced into an expression. The expression can 
+    refer to one or more X- and Y-variables defined for the reference observations.} 
+  \item{trgValCI}{The confidence interval that should contain the \code{mean(trgVal)}.
+    If the mean falls within this interval, the problem is solved. If \code{NULL}, the
+    interval is based on \code{nStdev}.}
+  \item{nStdev}{the number of standard deviations in the vector of values used to 
+    compute the confidence interval when one is computed, ignored if \code{trgValCI} 
     is not \code{NULL}.}
-  \item{excludeRefIds}{identities of reference observations to exclude from the population, 
-    if coded as "all" then all references are excluded, see details.}
+  \item{excludeRefIds}{identities of reference observations to exclude from the 
+    population, if coded as "all" then all references are excluded (see details).}
   \item{trace}{if \code{TRUE}, detailed output is produced.}
 }
 
@@ -87,7 +84,7 @@ correctBias(object,trgVal,trgValCI=NULL,nStdev=1.5,excludeRefIds=NULL,trace=FALS
   \cr\cr
   2. One of several possible passes through the data are taken to find neighbor switches
   that will result in the bias being corrected. A pass includes computing the
-  attribute of interest (using the \code{expression}) using values imputed to all 
+  attribute of interest by applying the \code{expression} to values imputed to all 
   the targets, under the assumption that the next neighbor is used 
   in place of the currently used neighbor. This computation results in a 
   vector with one element for each target observation that 
@@ -101,13 +98,14 @@ correctBias(object,trgVal,trgValCI=NULL,nStdev=1.5,excludeRefIds=NULL,trace=FALS
   The number of possible passes is equal to \emph{k-1} where \emph{k} is
   set in the original call to \code{\link{yai}}. Note that switches are made
   among targets only, and never among reference observations that may make up the
-  population. That is, reference observations are always left to represent themselves.   
+  population. That is, reference observations are always left 
+  to represent themselves with \code{k=1}.   
   \cr\cr
   3. Here are details of the argument \code{excludeRefIds}. When computing then mean
   of the attribute of interest (using the \code{expression}), 
   \code{correctBias()} must know which observations represent the
-  population. Normally, all the target observations would be in this set, but perhaps not
-  all of the reference observations. When \code{excludeRefIds} 
+  population. Normally, all the target observations would be in this set, but perhaps
+  not all of the reference observations. When \code{excludeRefIds} 
   is left NULL, the population is made of all reference and all
   target observations. Reference observations that should be left out
   of the calculations because they are not part of the population can be specified
@@ -152,9 +150,11 @@ names(y2) <- c("Petal.Width","Sp1","Sp2")
 # find 5 refernece neighbors for each target
 msn <- yai(x=x,y=y2,method="msn",k=5)
 
-# check for and correct for bias. Neighbor selections will be
-# changed to bring the imputed values into line with the CI.
-# in this case, no changes are made (npasses returns as zero).
+# check for and correct for bias in mean "Petal.Width". Neighbor  
+# selections will be changed as needed to bring the imputed values 
+# into line with the CI. In this case, no changes are made (npasses 
+# returns as zero).
+
 msnCorr = correctBias(msn,trgVal="Petal.Width")
 msnCorr$biasParameters
 
