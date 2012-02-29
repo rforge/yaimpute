@@ -44,30 +44,42 @@ notablyDifferent <- function (object,vars=NULL,threshold=NULL,p=.05,...)
 
 
 
-
 plot.notablyDifferent <- function (obj,add=FALSE,...)
-{
-  if (missing(obj)) stop ("object required.")
-  if (class(obj)[1] != "notablyDifferent")  stop ("object must be class notablyDifferent")
-  all = c(obj$rmsdS.refs,obj$rmsdS.trgs)
-  pch = c(rep(1,length(obj$rmsdS.refs)),rep(2,length(obj$rmsdS.trgs)))
-  names(pch) = names(all)
-  pch[names(obj$notablyDifferent.refs)] = 18
-  pch[names(obj$notablyDifferent.trgs)] = 20
-  x = 1:length(all)
-  if (add) points(x=x,y=all,pch=pch,...) else 
-             plot(x=x,y=all,pch=pch,
-                  ylab="Scaled RMSD",xlab="Observation",...)
-  abline(h=obj$threshold,...)
+{ 
+  if (missing(obj)) stop ("obj required")
+  if (class(obj) == "list")
+  {
+    if (!all(unlist(lapply(obj,function (x) class(x)=="notablyDifferent"))))
+       stop ("all members in the object list must be class notablyDifferent") 
+    ans = matrix(unlist(lapply(obj,function (x) 
+      {
+        all = c(x$rmsdS.refs,x$rmsdS.trgs)
+        c(max (all), length(all))
+      })),length(obj),2,byrow=TRUE)
+    xlim = c(1,max(ans[,2]))
+    ylim = c(0,max(ans[,1]))    
+    for (i in 1:length(obj))
+    {
+      plot.notablyDifferent(obj[[i]],xlim=xlim,ylim=ylim,add=i>1,col=i,...)
+      if (i==1) text(.05*xlim[2],y=.99*ylim[2],pos=4,"Case")
+      text(x=.05*xlim[2],y=(.99-(.06*i))*ylim[2],pos=4,
+          if (is.null(names(obj)[i])) i else names(obj)[i],col=i)
+    }
+  }
+  else
+  {   
+    if (class(obj) != "notablyDifferent")  stop ("object must be class notablyDifferent")
+    all = c(obj$rmsdS.refs,obj$rmsdS.trgs)
+    pch = c(rep(1,length(obj$rmsdS.refs)),rep(2,length(obj$rmsdS.trgs)))
+    names(pch) = names(all)
+    pch[names(obj$notablyDifferent.refs)] = 18
+    pch[names(obj$notablyDifferent.trgs)] = 20
+    x = 1:length(all)
+    if (add) points(x=x,y=all,pch=pch,...) else 
+               plot(x=x,y=all,pch=pch,main="Imputation Error Profile",
+                    ylab="Scaled RMSD",xlab="Observation",...)
+    abline(h=obj$threshold,...)
+  }
 }
   
   
-
-
-
-
-
-
-
-
-
