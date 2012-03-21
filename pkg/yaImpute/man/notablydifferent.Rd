@@ -14,7 +14,8 @@ notablyDifferent(object,vars=NULL,threshold=NULL,p=.05,...)
 
 \arguments{
   \item{object}{an object of class \code{\link{yai}}.}
-  \item{vars}{a vector of character strings naming the variables to use.}
+  \item{vars}{a vector of character strings naming the variables to use, if 
+       null the X-variables form \code{object} are used.}
   \item{threshold}{a threshold that if exceeded the observations are listed as 
         \emph{notably} different.}
   \item{p}{\code{(1-p)*100} is the percentile point in the distribution 
@@ -47,12 +48,13 @@ notablyDifferent(object,vars=NULL,threshold=NULL,p=.05,...)
 \value{
   A named list of several items. In all cases vectors are named using the observation
   ids which are the row names of the data used to build the \code{\link{yai}}object.
+  \item{call}{The call.}
+  \item{vars}{The variables used (may be fewer than requested).}
+  \item{threshold}{The threshold value.} 
   \item{notablyDifferent.refs}{A sorted named vector of \emph{references} that exceed 
     the threshold.}
   \item{notablyDifferent.trgs}{A sorted named vector of \emph{targets} that exceed 
     the threshold.}
-  \item{threshold}{The threshold value.}
-  \item{vars}{The variables used (may be fewer than requested).}
   \item{rmsdS.refs}{A sorted named vector of scaled RMSD \emph{references}.}
   \item{rmsdS.trgs}{A sorted named vector of scaled RMSD \emph{targets}.} 
 }
