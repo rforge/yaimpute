@@ -8,7 +8,7 @@ yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
    findFactors =  get("findFactors",asNamespace("yaImpute"))
 
    ftest.cor = function (p,q,N,cor)
-   {
+   {  
       s=min(p,q)
       if (s==0) stop ("p and q must be > 0")
       if (length(cor) < s) stop ("cor too short")
@@ -24,10 +24,18 @@ yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
       lamda.invt=lamda^(1/t)
       Ddf=(r*t)-(2*u)
       setNA = Ddf < 1 | Ndf < 1
-      F=((1-lamda.invt)/lamda.invt)*(Ddf/Ndf)
+      firstNA = which(setNA == TRUE)
+      if (length(firstNA) == 0) firstNA=0
+      if (length(firstNA) > 1)  firstNA=firstNA[1]
+      if (firstNA > 0) setNA[firstNA:length(setNA)] = TRUE
+      F=((1-lamda.invt)/lamda.invt)*(Ddf/Ndf)      
       F[setNA] = NA
-      pgF=pf(F,Ndf,Ddf,lower.tail=FALSE)
-      pgF[setNA] = NA
+      pgF = F
+      firstNA = if (firstNA > 1) firstNA else length(F)
+      {
+        pgF[1:firstNA]=pf(F[1:firstNA],Ndf[1:firstNA],Ddf[1:firstNA],lower.tail=FALSE)
+        pgF[setNA] = NA
+      } 
       list(F=F,pgF=pgF)
    }
    mymean = function(x)
@@ -238,9 +246,18 @@ yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
       nVec=max(nVec,1)
       if (method == "msn" ) projector = cancor$xcoef[,1:nVec,drop=FALSE] %*%
                                         diag(cancor$cor[1:nVec,drop=FALSE],nVec,nVec)
-      if (method == "msn2") projector = cancor$xcoef[,1:nVec,drop=FALSE] %*%
+                                        
+      if (method == "msn2") 
+      {
+        if (any (1/(1-cancor$cor[1:nVec,drop=FALSE]^2) < .Machine$double.eps*10000)) nVec=1
+        if (any (1/(1-cancor$cor[1:nVec,drop=FALSE]^2) < .Machine$double.eps*10000)) 
+           stop("msn2 can not be run likely because there are too few obesrvations.")
+        projector = cancor$xcoef[,1:nVec,drop=FALSE] %*%
                                         diag(cancor$cor[1:nVec,drop=FALSE],nVec,nVec) %*%
                                         diag(sqrt(1/(1-cancor$cor[1:nVec,drop=FALSE]^2)),nVec,nVec)
+        if (any (projector == -Inf | projector == Inf | 
+                 is.na(projector) | is.nan(projector))) stop ("msn2 can not be run.")   
+      }                                        
       if (length(theCols)<ncol(xRefs))
       {
          if (is.null(xDrop)) xDrop=xScale$center==0 #just get the names and create a logical
