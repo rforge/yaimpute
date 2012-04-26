@@ -542,15 +542,21 @@ yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
          {
              ann.out=ann(xcvRefs, xcvRefs, l, verbose=FALSE)$knnIndexDist
              neiDstRefs[TRUE]=sqrt(ann.out[,(l+2):ncol(ann.out)])
+             # check for a second neighbor being the reference itself (can happen if the first
+             # and second neighbors both have distance of zero.
+             fix = ann.out[,1] != 1:nrow(ann.out)
+             if (any(fix)) ann.out[fix,2] = ann.out[fix,1]             
              for (i in 2:l)
+             {
                 neiIdsRefs[,(i-1)]=rownames(xcvRefs)[ann.out[,i]]
+             }
              rownames(neiDstRefs)=rownames(neiIdsRefs)
          }
          else
          {
-            for (row in rownames(xcvRefs))
+            for (row in 1:nrow(xcvRefs))
             {
-               d=sqrt(sort(apply(xcvRefs,MARGIN=1,sumSqDiff,xcvRefs[row,]))[2:l])
+               d=sort(apply(xcvRefs,MARGIN=1,sumSqDiff,xcvRefs[row,])[-row])[1:k]
                neiDstRefs[row,]=d
                neiIdsRefs[row,]=names(d)
             }
