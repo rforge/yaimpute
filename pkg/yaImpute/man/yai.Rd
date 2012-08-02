@@ -11,7 +11,7 @@
   \item finds the \emph{k}-nearest neighbors within the referenece observations 
   and between the reference and target observations.
   } 
-  An alternative method using randomForest
+  An alternative method using \code{\link[randomForest]{randomForest}
   classification and regression trees is provided for steps 2 and 3.
   \emph{Target} observations are those with values for X-variables and
   not for Y-variables, while \emph{reference} observations are those
