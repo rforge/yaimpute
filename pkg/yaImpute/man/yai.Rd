@@ -5,7 +5,7 @@
 
 \description{
   Given a set of observations, \code{yai} \enumerate{
-  \item aeparates the observations into \emph{reference} and \emph{target} observations,
+  \item separates the observations into \emph{reference} and \emph{target} observations,
   \item applies the specified method to project X-variables into a Euclidean space (not
   always, see argument \code{method}), and 
   \item finds the \emph{k}-nearest neighbors within the referenece observations 
