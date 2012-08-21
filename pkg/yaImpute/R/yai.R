@@ -358,7 +358,14 @@ yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
    {
       xcvRefs=scale(xRefs,center=xScale$center,scale=xScale$scale)
       ccaVegan = cca(X=yRefs, Y=xcvRefs)
-      if (is.null(ccaVegan$CCA)) stop ("cca() in package vegan failed, likely cause is too few X or Y variables.")
+      if (is.null(ccaVegan$CCA) | 
+          ccaVegan$CCA$rank == 0) 
+      {
+        warning (paste("cca() in package vegan failed, likely cause is",
+               "too few X or Y variables.\nAttemping rda(),",
+               "which is not well tested in the yaImpute package."))
+        ccaVegan = rda(X=yRefs, Y=xcvRefs)
+      }
 
       # create a projected space for the reference observations
       xcvRefs=predict(ccaVegan,type="lc",rank="full")
