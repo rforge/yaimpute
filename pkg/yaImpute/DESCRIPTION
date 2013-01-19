@@ -1,6 +1,6 @@
 Package: yaImpute
 Version: 1.0-19
-Date: April 2012
+Date: Jan 2013
 Title: yaImpute: An R Package for k-NN Imputation
 Author: Nicholas L. Crookston <ncrookston.fs@gmail.com>, Andrew O. Finley
         <afinley@stat.umn.edu>
