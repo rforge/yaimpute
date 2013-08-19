@@ -1,5 +1,5 @@
 Package: yaImpute
-Version: 1.0-19
+Version: 1.0-20
 Date: 2013-08-07
 Title: yaImpute: An R Package for k-NN Imputation
 Author: Nicholas L. Crookston and Andrew O. Finley (Sunil Arya and David Mount for ANN)
@@ -17,7 +17,4 @@ Description: Performs nearest neighbor-based imputation using one or more altern
  that are notably distant from reference observations, detecting and correcting 
  for bias, and mapping results.
 License: GPL (>= 2)
-Repository: CRAN
-Date/Publication: 2011-09-21 13:18:25
-Packaged: 2011-09-20 15:17:53 UTC; ncrookston
 
