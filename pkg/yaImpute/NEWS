@@ -1,6 +1,10 @@
 Changes in version 1.0-20:
 
-* Fixed a small typographical error in the help for correctBias.
+* Fixed a small typographical error in the help for correctBias, accomplished 
+minor edits to other help files. 
+* Added the ability to specify k in function newtargets (how did I miss that?).
+* Added function applyMask that removes (or keeps) reference neighbors that share 
+group membership with a target (see help). 
 
 Changes in version 1.0-19:
 

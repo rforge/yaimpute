@@ -22,10 +22,12 @@
 #   neiIdsTrgs: A data frame of reference identifications that correspond to
 #       neiDstTrgs.
 #
+#   k: new value of k, if null, the value is taken from object.
+#
 #   ann: use ann or not...if null, the value is taken from object.
 #
 
-newtargets=function(object,newdata,ann=NULL)
+newtargets=function(object,newdata,k=NULL,ann=NULL)
 {
    if (class(object) != "yai") stop ("object must be class yai")
    if (is.null(newdata) | nrow(newdata)==0) stop ("newdata is required")
@@ -38,6 +40,7 @@ newtargets=function(object,newdata,ann=NULL)
    factorMatch = get("factorMatch",asNamespace("yaImpute"))
 
    if (is.null(ann)) ann=object$ann
+   if (!is.null(k)) object$k=k
 
    object$call=match.call()
 

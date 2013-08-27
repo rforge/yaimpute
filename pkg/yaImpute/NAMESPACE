@@ -4,7 +4,7 @@ export(ann, compare.yai, cor.yai, correctBias, foruse, impute, mostused,
        impute.yai, newtargets, notablyDistant, rmsd.yai, unionDataJoin, 
        vars, whatsMax, xvars, yai, yaiRFsummary, yaiVarImp, yvars, 
        errorStats, AsciiGridImpute, AsciiGridPredict, notablyDifferent,
-       plot.notablyDifferent)
+       plot.notablyDifferent, applyMask)
 
 S3method(print, yai)
 S3method(summary, yai)

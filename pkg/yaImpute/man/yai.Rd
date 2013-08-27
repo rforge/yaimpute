@@ -45,26 +45,26 @@ yai(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
      \code{mahalanobis}. When NULL, the number is set by the function.}
   \item{pVal}{significant level for canonical vectors, used when \code{method} is
     \code{msn} or \code{msn2}.}
-  \item{method}{is the strategy finding neighbors; the
-    options are the quoted key words (see details):
+  \item{method}{is the strategy used for computing distance and therefore for finding neighbors; the
+    options are quoted key words (see details):
     \itemize{
-      \item{\code{euclidean}}{distance is computed in a normalized X space.}
-      \item{\code{raw}}{like euclidean, except no normalization is done.}
-      \item{\code{mahalanobis}}{distance is computed in its namesakes space.}
-      \item{\code{ica}}{like mahalanobis, but based on \emph{Independent Component Analysis} using
+      \item{\code{euclidean }}{distance is computed in a normalized X space.}
+      \item{\code{raw }}{like euclidean, except no normalization is done.}
+      \item{\code{mahalanobis }}{distance is computed in its namesakes space.}
+      \item{\code{ica }}{like mahalanobis, but based on \emph{Independent Component Analysis} using
           package \code{\link[fastICA]{fastICA}}.}
-      \item{\code{msn}}{distance is computed in a projected canonical space.}
-      \item{\code{msn2}}{like msn, but with variance weighting (canonical regression
+      \item{\code{msn }}{distance is computed in a projected canonical space.}
+      \item{\code{msn2 }}{like msn, but with variance weighting (canonical regression
             rather than correlation).}
-      \item{\code{gnn}}{ distance is computed using a projected ordination of
+      \item{\code{gnn }}{ distance is computed using a projected ordination of
          Xs found using canonical correspondence analysis
          (\code{\link[vegan]{cca}} from package \pkg{vegan}). 
          If \code{\link[vegan]{cca}} fails, \code{\link[vegan]{rda}} is used
          and a warning is issued.}
-      \item{\code{randomForest}}{distance is one minus the
+      \item{\code{randomForest }}{distance is one minus the
          proportion of randomForest trees where a target observation is in
          the same terminal node as a reference observation (see \code{\link[randomForest]{randomForest}}).}
-      \item{\code{random}}{like raw except that the X space is a single vector of uniform random [0,1]
+      \item{\code{random }}{like raw except that the X space is a single vector of uniform random [0,1]
          numbers generated using \code{\link[stats]{runif}}, results in random assignement of neighbors,
          and forces \code{ann} to be FALSE.}
     }
