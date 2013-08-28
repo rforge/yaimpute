@@ -4,7 +4,8 @@ Changes in version 1.0-20:
 minor edits to other help files. 
 * Added the ability to specify k in function newtargets (how did I miss that?).
 * Added function applyMask that removes (or keeps) reference neighbors that share 
-group membership with a target (see help). 
+group membership with a target. Thanks to Clara Antón Fernández for suggestions that
+lead to this function being added.
 
 Changes in version 1.0-19:
 
