@@ -136,9 +136,9 @@ situation.
   \item{ann}{the value of ann, TRUE when \code{\link{ann}} is used, FALSE otherwise.}
   \item{xlevels}{NULL if no factors are used as predictors; otherwise a list
         of predictors that have factors and their levels (see \code{\link[stats]{lm}}).}
-  \item{neiDstTrgs}{a data frame of distances between a target
+  \item{neiDstTrgs}{a matrix of distances between a target
      (identified by its row name) and the \emph{k} references. There are \emph{k} columns.}
-  \item{neiIdsTrgs}{a data frame of reference identifications
+  \item{neiIdsTrgs}{a matrix of reference identifications
       that correspond to neiDstTrgs.}
   \item{neiDstRefs, neiIdsRefs}{counterparts for references.}
 

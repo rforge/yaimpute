@@ -31,9 +31,9 @@ newtargets(object,newdata,k=NULL,ann=NULL)
   \item{trgRows}{a list of the row names for target observations
      as a subset of all observations.}
   \item{xall}{the \emph{X}-variables for all observations.}
-  \item{neiDstTrgs}{a data frame of distances between a target
+  \item{neiDstTrgs}{a matrix of distances between a target
      (identified by its row name) and the k references. There are k columns.}
-  \item{neiIdsTrgs}{A data frame of reference identifications
+  \item{neiIdsTrgs}{a matrix of reference identifications
       that correspond to neiDstTrgs.}
   \item{neiDstRefs}{set NULL as if \code{noRefs=TRUE} in the original call to \code{\link{yai}}.}
   \item{neiIdsRefs}{set NULL as if \code{noRefs=TRUE} in the original call to \code{\link{yai}}.}
