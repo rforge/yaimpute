@@ -82,10 +82,7 @@ applyMask(m55,refGroups=iris$Species,trgGroups=iris2$Species,
 #  thereby forcing neighbors to be from the same species (this
 #  is generally true anyway using the iris data). 
 
-#  additionally, demonstrate that the groups can be other data types.
-
-applyMask(m55,refGroups=as.integer(iris$Species),
-              trgGroups=as.integer(iris$Species),
+applyMask(m55,iris$Species,trgGroups=iris2$Species,
           method="keepWhenCommon",k=2)
 
 }
