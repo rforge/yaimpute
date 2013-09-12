@@ -2,10 +2,16 @@
 \alias{applyMask}
 \title{Removes neighbors that share (or not) group membership with targets.}
 
-\description{Neighbor relationships present in an object created by \code{\link{yai}} or
-\code{\link{newtargets}} are removed when they are in (a) the same group or (b) from different
-groups, depending on the \code{method} used. Group membership is identified for reference and
-target observations by two vectors of values that are compared.
+\description{Some of the nearest neighbors found using \code{\link{yai}} or
+\code{\link{newtargets}} are removed using this function. This is possible when there 
+are several reference observations for each target as is the case with \emph{k>1}. 
+The function removes neighbor reference observations for a given target if the reference
+and target are in (a) the same group or (b) from different
+groups, depending on the \code{method} used. Group membership is identified for 
+reference and target observations using two vectors, \code{refGroups} for references 
+and \code{trgGroups} targets. If the group membership code is the same for a 
+refernece and a target, then they are in the same group while different codes mean  
+a lack of common group membership.
 }
 
 \usage{
@@ -55,21 +61,19 @@ data(iris)
 
 # build a base case, there are no targets, 
 #    turn off getting references neighbors.
-mal = yai(x=iris[,-5],method="mahalanobis", noRefs = TRUE)
+mal <- yai(x=iris[,-5],method="mahalanobis", noRefs = TRUE)
 
 # create a new data, just a copy of the old with new row names.
-iris2 = iris
-rownames(iris2) = paste0("new.",rownames(iris))
+iris2 <- iris
+rownames(iris2) <- paste0("new.",rownames(iris))
 
 # do an imputation with k=55
-m55 = newtargets(mal,newdata=iris2,k=55)
+m55 <- newtargets(mal,newdata=iris2,k=55)
 
 # get the 2 closest where the species codes don't match by
 #  removing neighbors when the ref group membership is 
 #  in common with the target group membership (same species),
-#  thereby forcing neighbors to be from different species. [gosh,
-#  who would want such a thing? But this does illustrate now
-#  masking works.]
+#  thereby forcing neighbors to be from different species. 
 
 #  in this case, the groups are species codes. 
 
