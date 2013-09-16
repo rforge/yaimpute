@@ -2,8 +2,14 @@
 mergeReps <- function (reps, noTrgs=FALSE, noRefs=FALSE, k=NULL)
 {
   if (!all(unlist(lapply(reps,function (x) class(x) == "yai")))) stop("class must be yai for all reps")
+  if (!all(unlist(lapply(reps,function (x) length(x$bootstrap) > 1)))) stop("all objects must be built with bootstrap")
 
   cl=match.call()
+
+  #build bootstrap sample weightss
+  cnts = table(unlist(lapply(reps,function (x) unique(x$bootstrap))))
+  wts  = length(reps)/cnts
+  names(wts) = names(cnts)
   
   if (length(reps) == 1) 
   {
@@ -54,7 +60,7 @@ mergeReps <- function (reps, noTrgs=FALSE, noRefs=FALSE, k=NULL)
   if (noTrgs & noRefs) stop("Can't find neighbors in any objects")  
  
   # define an internal function to do the mergers
-  mkMerge <- function (kIds,kDst,rown,nreps)
+  mkMerge <- function (kIds,kDst,rown,nreps,wts)
   {
     if (is.null(rown)) # assume all rows line up which is much faster
     {
@@ -75,8 +81,13 @@ mergeReps <- function (reps, noTrgs=FALSE, noRefs=FALSE, k=NULL)
       kIds = kid
       kDst = kds
     }
-    newIds = apply(kIds,1,function (x) names(which.max(table(x))))
+    newIds = apply(kIds,1,function (x,wts) 
+      {
+        cnts = table(x)
+        names(which.max(cnts*wts[names(cnts)]))       
+      }, wts)
     newDst = vector("numeric",length(newIds))
+
     for (i in 1:length(newIds))
     {
       inc = kIds[i,] ==  newIds[i]
@@ -98,7 +109,7 @@ mergeReps <- function (reps, noTrgs=FALSE, noRefs=FALSE, k=NULL)
     {
       kIds = lapply(reps,function (x,k) x$neiIdsTrgs[,k], k)
       kDst = lapply(reps,function (x,k) x$neiDstTrgs[,k], k)
-      tmp = mkMerge(kIds,kDst,rowNT,length(reps))
+      tmp = mkMerge(kIds,kDst,rowNT,length(reps),wts)
       idsT[[k]] = tmp$ids
       dstT[[k]] = tmp$dst
     } 
@@ -106,7 +117,7 @@ mergeReps <- function (reps, noTrgs=FALSE, noRefs=FALSE, k=NULL)
     {      
       kIds = lapply(reps,function (x,k) x$neiIdsRefs[,k], k)
       kDst = lapply(reps,function (x,k) x$neiDstRefs[,k], k)
-      tmp = mkMerge(kIds,kDst,rowNR,length(reps))
+      tmp = mkMerge(kIds,kDst,rowNR,length(reps),wts)
       idsR[[k]] = tmp$ids
       dstR[[k]] = tmp$dst
     }
