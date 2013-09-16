@@ -30,6 +30,9 @@
 newtargets=function(object,newdata,k=NULL,ann=NULL)
 {
    if (class(object) != "yai") stop ("object must be class yai")
+   if (length(object$bootstrap) > 1) 
+       stop ("objects built with bootstrap are not yet supported by newtargets.")
+   if (object$method == "ensemble") stop ("newtargets can not be found for objects with method 'ensemble'.")
    if (is.null(newdata) | nrow(newdata)==0) stop ("newdata is required")
    if (object$method == "gnn") # (GNN), make sure we have package vegan loaded
       if (!require (vegan)) stop("install vegan and try again")

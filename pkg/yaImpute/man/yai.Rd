@@ -22,7 +22,7 @@
 \usage{
 yai(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
     nVec=NULL,pVal=.05,method="msn",ann=TRUE,mtry=NULL,ntree=500,
-    rfMode="buildClasses")
+    rfMode="buildClasses",bootstrap=FALSE)
 }
 
 \arguments{
@@ -67,7 +67,7 @@ yai(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
       \item{\code{random }}{like raw except that the X space is a single vector of uniform random [0,1]
          numbers generated using \code{\link[stats]{runif}}, results in random assignement of neighbors,
          and forces \code{ann} to be FALSE.}
-    }
+    }   
   }
   \item{ann}{TRUE if \code{\link{ann}} is used to find neighbors, FALSE if a slow search is used.}
   \item{mtry}{the number of X-variables picked at random when method is \code{randomForest},
@@ -79,6 +79,7 @@ yai(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
       are internally converted to classes forcing randomForest to build classification trees for
       the variable. Otherwise, regression trees are built if your version of
       \code{\link[randomForest]{randomForest}} is newer than \code{4.5-18}.}
+  \item{bootstrap}{if \code{TRUE}, the reference observations are sampled with replacement.}
 }
 
 \details{

@@ -1,6 +1,6 @@
 yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
                 nVec=NULL,pVal=.05,method="msn",ann=TRUE,mtry=NULL,ntree=500,
-                rfMode="buildClasses")
+                rfMode="buildClasses",bootstrap=FALSE)
 {
    # define functions used internally.
    sumSqDiff=function(x,y) { d=x-y; sum(d*d) }
@@ -88,7 +88,7 @@ yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
    if (method == "randomForest") # make sure we have package randomForest loaded
    {
       if (!require (randomForest)) stop("install randomForest and try again")
-   }
+   }     
 
    cl=match.call()
    obsDropped=NULL
@@ -137,8 +137,9 @@ yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
       ydum=TRUE
       yall=data.frame(ydummy=rep(1,nrow(xall)),row.names=rownames(xall))
    }
-   else ydum=FALSE
-   if (is.null(yall)) stop("y missing")
+   else ydum=FALSE   
+  
+   if (is.null(yall)) stop("y is missing")
    if (nrow(xall) == 0) stop ("no observations in x")
    if (! (method %in% c("random","randomForest")))
    {
@@ -148,25 +149,41 @@ yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
    }
    refs=intersect(rownames(yall),rownames(xall))
    if (length(refs) == 0) stop ("no reference observations.")
-   yRefs=yall[refs,,drop=FALSE]
-   xRefs=xall[refs,,drop=FALSE]
-   trgs=setdiff(rownames(xall),refs)
 
-   if (method == "gnn") # remove rows with zero sums or vegan will error off.
+   # if this is a bootstrap run, draw the sample.
+   if (bootstrap)
+   { 
+     if (length (grep ("\\.[0-9]$",rownames(xall))) > 0) 
+         stop ("rownames must not end with .[0-9] when bootstrap is true.")
+
+     bootsamp <- sort(sample(x=refs, size=length(refs), replace=TRUE))
+     yRefs=yall[bootsamp,,drop=FALSE]
+     xRefs=xall[bootsamp,,drop=FALSE]
+   } else {
+     yRefs=yall[refs,,drop=FALSE]
+     xRefs=xall[refs,,drop=FALSE]
+   }
+   trgs=setdiff(rownames(xall),refs)
+  
+   if (method == "gnn") # remove rows with zero sums or vegan will error off...
    {
       zero = apply(yRefs,1,sum) <= 0
       ndrop=sum(zero)
       if (ndrop>0)
       {
          warning (ndrop," rows have y-variable row sums <= 0 were converted to target observations for method gnn")
-         if (ndrop==length(refs)) stop ("all references were deleted")
+         if (ndrop==nrow(yRefs)) stop ("all references were deleted")
          obsDropped=union(obsDropped,refs[zero])
          refs=refs[!zero]
          yRefs=yall[refs,,drop=FALSE]
          xRefs=xall[refs,,drop=FALSE]
          trgs=setdiff(rownames(xall),refs)
       }
+   }
 
+
+   if (method == "gnn") # remove columns with zero sums.
+   {
       yDrop=apply(yRefs,2,sum) <= 0
       if (sum(yDrop) > 0) warning ("y variables with zero sums: ",
                                     paste(colnames(yRefs)[yDrop],collapse=","))
@@ -435,7 +452,14 @@ yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
          colnames(nodeset)=paste(colnames(nodeset),i,sep=".")
          nodes=if (is.null(nodes)) nodeset else cbind(nodes,nodeset)
       }
-      refNodes=nodes[rownames(xRefs),]
+  
+      if (bootstrap) 
+      {
+        rn = sub("\\.[0-9]$","",rownames(xRefs))
+        refNodes = nodes[rn,]
+        rownames(refNodes) = rownames(xRefs)
+      } else refNodes = nodes[rownames(xRefs),]
+
       INTrefNodes=as.integer(refNodes)
       INTnrow=as.integer(nrow(xRefs))
       INTncol=as.integer(ncol(nodes))
@@ -471,7 +495,8 @@ yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
       neiDstTrgs=matrix(data=NA,nrow=length(trgs),ncol=k)
       rownames(neiDstTrgs)=trgs
       colnames(neiDstTrgs)=paste("Dst.k",1:k,sep="")
-      neiIdsTrgs=neiDstTrgs
+      neiIdsTrgs=matrix(data="",nrow=length(trgs),ncol=k)
+      rownames(neiIdsTrgs)=trgs
       colnames(neiIdsTrgs)=paste("Id.k",1:k,sep="")
       if (method %in%  c("msn","msn2","mahalanobis","ica","euclidean","gnn","raw"))
       {
@@ -523,6 +548,7 @@ yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
                  Rnames[x[k+i]],i,k,rownames(xRefs)))
         } 
       }
+      
       else # default
       {
          stop("no code for specified method")
@@ -540,7 +566,8 @@ yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
       neiDstRefs=matrix(data=NA,nrow=nrow(xRefs),ncol=k)
       rownames(neiDstRefs)=rownames(xRefs)
       colnames(neiDstRefs)=paste("Dst.k",1:k,sep="")
-      neiIdsRefs=neiDstRefs
+      neiIdsRefs=matrix(data="",nrow=nrow(xRefs),ncol=k)
+      rownames(neiIdsRefs)=rownames(xRefs)
       colnames(neiIdsRefs)=paste("Id.k",1:k,sep="")
       l=k+1
       if (method %in%  c("msn","msn2","mahalanobis","ica","euclidean","gnn","raw"))
@@ -627,8 +654,22 @@ yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
          }
       }
    }
+   
+   # if bootstrap, then modify the reference ID's in the result ID tables. 
+   if (bootstrap) 
+   {
+     if (!is.null(neiIdsTrgs)) neiIdsTrgs[] = sub("\\.[0-9]$","",neiIdsTrgs[])
+     if (!is.null(neiIdsRefs)) 
+     {
+       ub = unique(bootsamp)
+       neiDstRefs = neiDstRefs[ub,]
+       neiIdsRefs = neiIdsRefs[ub,]
+       neiIdsRefs[] = sub("\\.[0-9]$","",neiIdsRefs[])
+     }
+   }
 
    out=list(call=cl,yRefs=yRefs,xRefs=xRefs,obsDropped=obsDropped,yDrop=yDrop,
+            bootstrap= if (bootstrap) bootsamp else bootstrap,
             xDrop=xDrop,trgRows=trgs,xall=xall,cancor=cancor,theFormula=theFormula,
             ftest=ftest,yScale=yScale,xScale=xScale,ccaVegan=ccaVegan,ranForest=ranForest,
             ICA=ICA,k=k,projector=projector,nVec=nVec,pVal=pVal,method=method,ann=ann,
