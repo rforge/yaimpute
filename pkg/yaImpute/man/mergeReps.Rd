@@ -50,7 +50,8 @@ mergeReps(reps)
 
 
 \author{
-  Nicholas L. Crookston \email{ncrookston.fs@gmail.com} 
+  Nicholas L. Crookston \email{ncrookston.fs@gmail.com} \cr
+  Acknowledgement: This function was inspired by conversations with John Coulston.
 }
 
 \keyword{multivariate}

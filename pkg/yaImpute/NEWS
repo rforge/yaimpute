@@ -1,5 +1,10 @@
 Changes in version 1.0-20:
 
+* Added bootstrap= option to yai() so that reference observations can 
+be sampled with replacement forming a bootstrap rep.
+* Added function mergeReps() to merge a list of bootstrap reps into
+one yai object. 
+* Modified some help files to improve acknowledgements and cross references.
 * Fixed a small typographical error in the help for correctBias, accomplished 
 minor edits to other help files. 
 * Added the ability to specify k in function newtargets (how did I miss that?).

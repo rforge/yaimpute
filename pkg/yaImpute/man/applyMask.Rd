@@ -11,7 +11,7 @@ groups, depending on the \code{method} used. Group membership is identified for
 reference and target observations using two vectors, \code{refGroups} for references 
 and \code{trgGroups} targets. If the group membership code is the same for a 
 refernece and a target, then they are in the same group while different codes mean  
-a lack of common group membership.
+a lack of common group membership. 
 }
 
 \usage{
@@ -93,7 +93,8 @@ applyMask(m55,iris$Species,trgGroups=iris2$Species,
 
 
 \author{
-  Nicholas L. Crookston \email{ncrookston.fs@gmail.com} 
+  Nicholas L. Crookston \email{ncrookston.fs@gmail.com} \cr
+  Acknowledgement: This function was inspired by correspondence with Clara Anton Fernandez.
 }
 
 \keyword{multivariate}

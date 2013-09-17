@@ -6,10 +6,6 @@ mergeReps <- function (reps, noTrgs=FALSE, noRefs=FALSE, k=NULL)
 
   cl=match.call()
 
-  #build bootstrap sample weightss
-  cnts = table(unlist(lapply(reps,function (x) unique(x$bootstrap))))
-  wts  = length(reps)/cnts
-  names(wts) = names(cnts)
   
   if (length(reps) == 1) 
   {
@@ -59,6 +55,11 @@ mergeReps <- function (reps, noTrgs=FALSE, noRefs=FALSE, k=NULL)
   }
   if (noTrgs & noRefs) stop("Can't find neighbors in any objects")  
  
+  #build bootstrap sample weightss
+  cnts = table(unlist(lapply(reps,function (x) unique(x$bootstrap))))
+  wts  = length(reps)/cnts
+  names(wts) = names(cnts)
+
   # define an internal function to do the mergers
   mkMerge <- function (kIds,kDst,rown,nreps,wts)
   {

@@ -145,6 +145,13 @@ situation.
 
 }
 
+\seealso{
+\code{\link{applyMask}} 
+\code{\link{correctBias}} 
+\code{\link{mergeReps}} 
+}
+
+
 \examples{
 
 require (yaImpute)
@@ -214,7 +221,8 @@ compare.yai(rforig2,rforig)
 
 \author{
   Nicholas L. Crookston \email{ncrookston.fs@gmail.com} \cr
-  Andrew O. Finley \email{finleya@msu.edu}
+  Andrew O. Finley \email{finleya@msu.edu} \cr
+  Acknowledgement: the bootstrap option was inspired by conversations with John Coulston.
 }
 
 \keyword{multivariate}
