@@ -38,8 +38,8 @@
        each having a weight of 1.}
   \item{k}{the number neighbors to use in averages, when NULL all present are used.}
   \item{vars}{a character vector of variables to impute, when NULL, the behaviour depends
-     on the value of \code{ancillaryData}: when it is NULL, the Y-variables are imputed
-     others all present in \code{ancillaryData} are imputed.}
+     on the value of \code{ancillaryData}: when it is NULL, the Y-variables are imputed and 
+     otherwise all present in \code{ancillaryData} are imputed.}
   \item{observed}{when TRUE, columns are created for \emph{observed} values (those from the
     \emph{target} observations) as well as imputed values (those from the
     \emph{reference} observations.}

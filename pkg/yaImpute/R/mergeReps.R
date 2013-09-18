@@ -53,9 +53,16 @@ mergeReps <- function (reps, noTrgs=FALSE, noRefs=FALSE, k=NULL)
       }
     }
   }
+  rowNT = setdiff(rowNT,rowNR)
+  if (length(rowNT) == 0) 
+  {
+    rowNT = NULL
+    noTrgs = TRUE
+  }
+  
   if (noTrgs & noRefs) stop("Can't find neighbors in any objects")  
  
-  #build bootstrap sample weightss
+  #build bootstrap sample weights
   cnts = table(unlist(lapply(reps,function (x) unique(x$bootstrap))))
   wts  = length(reps)/cnts
   names(wts) = names(cnts)
@@ -74,9 +81,9 @@ mergeReps <- function (reps, noTrgs=FALSE, noRefs=FALSE, k=NULL)
       rownames(kds) = rown
       for (i in 1:nreps) 
       {
-        idx = match(names(kIds[[i]]),rown)       
-        kid[idx,i] = kIds[[i]]
-        kds[idx,i] = kDst[[i]]
+        idx = match(rown,names(kIds[[i]]))       
+        kid[,i] = kIds[[i]][idx]
+        kds[,i] = kDst[[i]][idx]
       }
       kid[kid == "" ] = NA
       kIds = kid
@@ -205,7 +212,7 @@ mergeReps <- function (reps, noTrgs=FALSE, noRefs=FALSE, k=NULL)
            neiDstTrgs=dstT,neiIdsTrgs=idsT,
            neiDstRefs=dstR,neiIdsRefs=idsR)
 
-   class(out)="yai"
-   out
+  class(out)="yai"
+  out
 }
 

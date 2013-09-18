@@ -97,6 +97,11 @@ missing data for Y-variables. When Y is NULL (there are no Y-variables),
 all the observations are considered \emph{references}. See
 \code{\link{newtargets}} for an example of how to use yai in this
 situation.
+
+When \code{bootstrap=TRUE} the reference observations are sampled with replacement. The
+sample size is set to the number of reference observations. Normally, about a third of
+the reference observations are left out of the sample; they are often called out-of-bag 
+samples. The out-of-bag observations are then treated as targets.
 }
 
 
@@ -142,6 +147,8 @@ situation.
   \item{neiIdsTrgs}{a matrix of reference identifications
       that correspond to neiDstTrgs.}
   \item{neiDstRefs, neiIdsRefs}{counterparts for references.}
+  \item{bootstrap}{a vector of reference rownames that constitute the bootstrap sample; 
+      or the value \code{FALSE} when bootstrap is not used.}
 
 }
 

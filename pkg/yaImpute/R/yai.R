@@ -159,10 +159,12 @@ yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
      bootsamp <- sort(sample(x=refs, size=length(refs), replace=TRUE))
      yRefs=yall[bootsamp,,drop=FALSE]
      xRefs=xall[bootsamp,,drop=FALSE]
+     refs = bootsamp
    } else {
      yRefs=yall[refs,,drop=FALSE]
      xRefs=xall[refs,,drop=FALSE]
    }
+   
    trgs=setdiff(rownames(xall),refs)
   
    if (method == "gnn") # remove rows with zero sums or vegan will error off...

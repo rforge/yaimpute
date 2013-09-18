@@ -3,7 +3,8 @@
 \title{Merges a list of k-NN objects into one ensemble (EXPERIMENTAL)}
 
 \description{Several objects of class \code{\link{yai}} are combined into a new
-object forming a consensus among the several. 
+object forming a consensus among the many. The intention is that the many would
+be formed by running yai several times with \code{bootstrap=TRUE}
 }
 
 \usage{
@@ -30,13 +31,13 @@ mergeReps(reps, noTrgs=FALSE, noRefs=FALSE, k=NULL)
 require (yaImpute)
 data(iris)
 
+set.seed(123) 
+
 # form some test data, y's are defined only for reference
 # observations.
 refs=sample(rownames(iris),50)
 x <- iris[,1:2]      # Sepal.Length Sepal.Width
 y <- iris[refs,3:4]  # Petal.Length Petal.Width
-
-set.seed(123); 
 
 reps = list()
 for (rep in 1:20)
