@@ -22,7 +22,7 @@
 \usage{
 yai(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
     nVec=NULL,pVal=.05,method="msn",ann=TRUE,mtry=NULL,ntree=500,
-    rfMode="buildClasses",bootstrap=FALSE)
+    rfMode="buildClasses",bootstrap=FALSE,ppControl=NULL)
 }
 
 \arguments{
@@ -56,16 +56,18 @@ yai(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
       \item{\code{msn }}{distance is computed in a projected canonical space.}
       \item{\code{msn2 }}{like msn, but with variance weighting (canonical regression
             rather than correlation).}
+      \item{\code{msnPP }}{like msn, except that the canonical correlation is computed using
+            projection pursuit from \pkg{ccaPP} (see argument \code{ppControl}).}
       \item{\code{gnn }}{ distance is computed using a projected ordination of
          Xs found using canonical correspondence analysis
          (\code{\link[vegan]{cca}} from package \pkg{vegan}). 
          If \code{\link[vegan]{cca}} fails, \code{\link[vegan]{rda}} is used
          and a warning is issued.}
       \item{\code{randomForest }}{distance is one minus the
-         proportion of randomForest trees where a target observation is in
+         proportion of \pkg{randomForest} trees where a target observation is in
          the same terminal node as a reference observation (see \code{\link[randomForest]{randomForest}}).}
       \item{\code{random }}{like raw except that the X space is a single vector of uniform random [0,1]
-         numbers generated using \code{\link[stats]{runif}}, results in random assignement of neighbors,
+         numbers generated using \code{\link[stats]{runif}}, results in random assignment of neighbors,
          and forces \code{ann} to be FALSE.}
     }   
   }
@@ -78,8 +80,10 @@ yai(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
   \item{rfMode}{when \code{buildClasses} and method is \code{randomForest}, continuous variables
       are internally converted to classes forcing randomForest to build classification trees for
       the variable. Otherwise, regression trees are built if your version of
-      \code{\link[randomForest]{randomForest}} is newer than \code{4.5-18}.}
+      \pkg{randomForest} is newer than \code{4.5-18}.}
   \item{bootstrap}{if \code{TRUE}, the reference observations are sampled with replacement.}
+  \item{ppControl}{used to control how canoncial correlation analysis via 
+      projection pursuit is done, see Details.}
 }
 
 \details{
@@ -102,6 +106,16 @@ When \code{bootstrap=TRUE} the reference observations are sampled with replaceme
 sample size is set to the number of reference observations. Normally, about a third of
 the reference observations are left out of the sample; they are often called out-of-bag 
 samples. The out-of-bag observations are then treated as targets.
+
+When \code{method="msnPP"} projection pursuit from \pkg{ccaPP} is used. The method is
+further controlled using argument \code{ppControl} to specify a character vector that has 
+has two named components.
+  \itemize{
+    \item{\code{method }}{One of the following 
+      \code{"spearman", "kendall", "quadrant", "M", "pearson"}, default is "spearman"}
+    \item{\code{search }}{If \code{"data"} or \code{"proj"}, then \code{\link[ccaPP]{ccaProj}} 
+      is used, otherwise the default \code{\link[ccaPP]{ccaGrid}} is used.}
+  }
 }
 
 
@@ -149,13 +163,11 @@ samples. The out-of-bag observations are then treated as targets.
   \item{neiDstRefs, neiIdsRefs}{counterparts for references.}
   \item{bootstrap}{a vector of reference rownames that constitute the bootstrap sample; 
       or the value \code{FALSE} when bootstrap is not used.}
-
 }
 
 \seealso{
-\code{\link{applyMask}} 
-\code{\link{correctBias}} 
-\code{\link{mergeReps}} 
+\code{\link{applyMask}} \code{\link{correctBias}} \code{\link{buildConsensus}}  
+\code{\link{ensembleImpute}}
 }
 
 
@@ -179,8 +191,11 @@ y <- iris[refs,3:4]  # Petal.Length Petal.Width
 msn <- yai(x=x,y=y)
 mal <- yai(x=x,y=y,method="mahalanobis")
 
+# use projection pursuit and specify ppControl (loads package ccaPP)
+msnPP <- yai(x=x,y=y,method="msnPP",ppControl=c(method="kendall",search="proj"))
+
 # running the following examples will load packages vegan
-# and randomForest, and is more complicated.
+# and randomForest, and are more complicated.
 
 data(MoscowMtStJoe)
 
@@ -228,8 +243,8 @@ compare.yai(rforig2,rforig)
 
 \author{
   Nicholas L. Crookston \email{ncrookston.fs@gmail.com} \cr
-  Andrew O. Finley \email{finleya@msu.edu} \cr
-  Acknowledgement: the bootstrap option was inspired by conversations with John Coulston.
+  John Coulston \email{jcoulston@fs.fed.us} \cr
+  Andrew O. Finley \email{finleya@msu.edu} 
 }
 
 \keyword{multivariate}

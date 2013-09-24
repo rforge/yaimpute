@@ -7,7 +7,7 @@ Copyright: ANN library is copyright University of Maryland and Sunil Arya and
  David Mount. See file COPYRIGHTS for details.
 Maintainer: Nicholas L. Crookston <ncrookston.fs@gmail.com>
 Depends: R (>= 2.11.0)
-Suggests: vegan, randomForest, gam, fastICA
+Suggests: vegan, ccaPP, randomForest, gam, fastICA
 Description: Performs nearest neighbor-based imputation using one or more alternative 
  approaches to processing multivariate data. These include methods based on canonical 
  correlation analysis, canonical correspondence analysis, and a multivariate adaptation 
@@ -15,6 +15,6 @@ Description: Performs nearest neighbor-based imputation using one or more altern
  Cutler. Additional methods are also offered. The package includes functions for 
  comparing the results from running alternative techniques, detecting imputation targets 
  that are notably distant from reference observations, detecting and correcting 
- for bias, and mapping results.
+ for bias, bootstraping and building ensemble imputations, and mapping results.
 License: GPL (>= 2)
 

@@ -1,14 +1,15 @@
-\name{mergeReps}
-\alias{mergeReps}
-\title{Merges a list of k-NN objects into one ensemble (EXPERIMENTAL)}
+\name{buildConsensus}
+\alias{buildConsensus}
+\title{Finds the consensus imputations among a list of yai objects}
 
 \description{Several objects of class \code{\link{yai}} are combined into a new
 object forming a consensus among the many. The intention is that the many would
-be formed by running yai several times with \code{bootstrap=TRUE}
+be formed by running yai several times with \code{bootstrap=TRUE} or by varying
+other options.
 }
 
 \usage{
-mergeReps(reps, noTrgs=FALSE, noRefs=FALSE, k=NULL)
+buildConsensus(reps, noTrgs=FALSE, noRefs=FALSE, k=NULL)
 }
 
 \arguments{
@@ -39,20 +40,17 @@ refs=sample(rownames(iris),50)
 x <- iris[,1:2]      # Sepal.Length Sepal.Width
 y <- iris[refs,3:4]  # Petal.Length Petal.Width
 
-reps = list()
-for (rep in 1:20)
-{
-  reps[[rep]] <- yai(x=x,y=y,method="msn",bootstrap=TRUE,k=2)
-}
+reps <- replicate(20, yai(x=x,y=y,method="msn",bootstrap=TRUE,k=2),
+                  simplify=FALSE)
 
-mergeReps(reps)
+buildConsensus(reps)
 
 }
 
 
 \author{
   Nicholas L. Crookston \email{ncrookston.fs@gmail.com} \cr
-  Acknowledgement: This function was inspired by conversations with John Coulston.
+  John Coulston \email{jcoulston@fs.fed.us} \cr
 }
 
 \keyword{multivariate}

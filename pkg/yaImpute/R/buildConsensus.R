@@ -1,11 +1,10 @@
 
-mergeReps <- function (reps, noTrgs=FALSE, noRefs=FALSE, k=NULL)
+buildConsensus <- function (reps, noTrgs=FALSE, noRefs=FALSE, k=NULL)
 {
-  if (!all(unlist(lapply(reps,function (x) class(x) == "yai")))) stop("class must be yai for all reps")
-  if (!all(unlist(lapply(reps,function (x) length(x$bootstrap) > 1)))) stop("all objects must be built with bootstrap")
+  if (!all(unlist(lapply(reps,function (x) class(x) == "yai")))) 
+    stop("class must be yai for all reps")
 
   cl=match.call()
-
   
   if (length(reps) == 1) 
   {
@@ -151,22 +150,47 @@ mergeReps <- function (reps, noTrgs=FALSE, noRefs=FALSE, k=NULL)
     colnames(dstR) = paste0("Dst.k",1:mxk)
   } 
   
-  # build a merged list of xall, yRefs, and xRefs
-  idx = if (is.null(rowNR)) NULL else na.omit(match(rowNR,rownames(reps[[1]]$xRefs))) 
-  yRefs = if (is.null(idx)) reps[[1]]$yRefs else reps[[1]]$yRefs[idx,]
-  xRefs = if (is.null(idx)) reps[[1]]$xRefs else reps[[1]]$xRefs[idx,]
-  for (i in 2:length(reps))
+  # build a merged list of yRefs, and xRefs
+  # find out if all the column names are the same.
+  
+  clsI = TRUE
+  for (i in 1:(length(reps)-1)) 
   {
-    rowNR = setdiff(rowNR,rownames(xRefs))
-    if (length(rowNR) == 0) break
-    idx = na.omit(match(rowNR,rownames(reps[[i]]$xRefs))) 
-    if (length(idx) > 0) 
+    if (!identical(colnames(reps[[i]]$yRefs),colnames(reps[[i+1]]$yRefs)) ||
+        !identical(colnames(reps[[i]]$xRefs),colnames(reps[[i+1]]$xRefs)))
     {
-      yRefs = rbind(yRefs,reps[[i]]$yRefs[idx,,drop=FALSE])
-      xRefs = rbind(xRefs,reps[[i]]$xRefs[idx,,drop=FALSE])
+      clsI = FALSE
+      break
+    }
+  }  
+  if (clsI) 
+  {
+    idx = if (is.null(rowNR)) NULL else na.omit(match(rowNR,rownames(reps[[1]]$xRefs))) 
+    yRefs = if (is.null(idx)) reps[[1]]$yRefs else reps[[1]]$yRefs[idx,]
+    xRefs = if (is.null(idx)) reps[[1]]$xRefs else reps[[1]]$xRefs[idx,]
+    for (i in 2:length(reps))
+    {
+      rowNR = setdiff(rowNR,rownames(xRefs))
+      if (length(rowNR) == 0) break
+      idx = na.omit(match(rowNR,rownames(reps[[i]]$xRefs))) 
+      if (length(idx) > 0) 
+      {
+        yRefs = rbind(yRefs,reps[[i]]$yRefs[idx,,drop=FALSE])
+        xRefs = rbind(xRefs,reps[[i]]$xRefs[idx,,drop=FALSE])
+      }
+    }
+  } else {
+    yRefs = reps[[1]]$yRefs
+    xRefs = reps[[1]]$xRefs
+    for (i in 2:length(reps))
+    {
+      if (!identical(yRefs,reps[[i]]$yRefs)) yRefs = unionDataJoin(yRefs,reps[[i]]$yRefs,warn=FALSE)
+      if (!identical(xRefs,reps[[i]]$xRefs)) xRefs = unionDataJoin(xRefs,reps[[i]]$xRefs,warn=FALSE)
     }
   }
-
+    
+  
+  # build a merged list of xall
   xall = reps[[1]]$xall
   for (i in 2:length(reps))
   {
@@ -208,7 +232,7 @@ mergeReps <- function (reps, noTrgs=FALSE, noRefs=FALSE, k=NULL)
   out=list(call=cl,yRefs=yRefs,xRefs=xRefs,obsDropped=NULL,yDrop=NULL,bootstrap=FALSE,
            xDrop=NULL,trgRows=rowNT,xall=xall,cancor=NULL,theFormula=NULL,
            ftest=NULL,yScale=yScale,xScale=xScale,ccaVegan=NULL,ranForest=NULL,
-           ICA=NULL,k=mxk,projector=NULL,nVec=NULL,pVal=NULL,method="ensemble",ann=FALSE,
+           ICA=NULL,k=mxk,projector=NULL,nVec=NULL,pVal=NULL,method="consensus",ann=FALSE,
            neiDstTrgs=dstT,neiIdsTrgs=idsT,
            neiDstRefs=dstR,neiIdsRefs=idsR)
 

@@ -89,7 +89,7 @@ newtargets=function(object,newdata,k=NULL,ann=NULL)
 
    theCols = colnames(object$xRefs)  # may be changed for reduced rank, depending on method.
 
-   if (object$method %in% c("msn","msn2","mahalanobis","ica"))
+   if (object$method %in% c("msn","msn2","msnPP","mahalanobis","ica"))
    {
       theCols = rownames(object$projector)
       xcvRefs=scale(object$xRefs,center=object$xScale$center,scale=object$xScale$scale)
@@ -147,7 +147,7 @@ newtargets=function(object,newdata,k=NULL,ann=NULL)
       xcvRefs=data.frame(random=runif(nrow(object$xRefs)),row.names=rownames(object$xRefs))
       xcvTrgs=data.frame(random=runif(length(trgs)),row.names=trgs)
    }
-   else if (object$method %in% c("msn","msn2","mahalanobis","ica"))
+   else if (object$method %in% c("msn","msn2","msnPP","mahalanobis","ica"))
    {  
       xcvRefs=as.matrix(xcvRefs[,theCols,drop=FALSE]) %*% object$projector
       xcvTrgs=scale(xTrgs,center=object$xScale$center,scale=object$xScale$scale)
@@ -172,7 +172,7 @@ newtargets=function(object,newdata,k=NULL,ann=NULL)
    neiIdsTrgs=neiDstTrgs
    colnames(neiIdsTrgs)=paste("Id.k",1:object$k,sep="")
 
-   if (object$method %in%  c("msn","msn2","mahalanobis","ica","euclidean","gnn","raw"))
+   if (object$method %in%  c("msn","msn2","msnPP","mahalanobis","ica","euclidean","gnn","raw"))
    {
       if (ann & nrow(xcvTrgs)>0)
       {

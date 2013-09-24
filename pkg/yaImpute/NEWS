@@ -1,9 +1,14 @@
 Changes in version 1.0-20:
 
+* Added method="msnPP" to function yai to enable using canonical correlation via 
+projection pursuit from package ccaPP
+* Added function ensembleImpute to get an mean or median imputation for several
+separate imputations. Computes the mode for factors.
+* Added John Coulston as an author on some of the new functions.
 * Added bootstrap= option to yai() so that reference observations can 
 be sampled with replacement forming a bootstrap rep.
-* Added function mergeReps() to merge a list of bootstrap reps into
-one yai object. 
+* Added function buildConsensus() to find a consensus imputation over several 
+reps and forming one yai object. 
 * Modified some help files to improve acknowledgements and cross references.
 * Fixed a small typographical error in the help for correctBias, accomplished 
 minor edits to other help files. 
