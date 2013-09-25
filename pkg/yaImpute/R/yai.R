@@ -1,6 +1,7 @@
 yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
                 nVec=NULL,pVal=.05,method="msn",ann=TRUE,mtry=NULL,ntree=500,
-                rfMode="buildClasses",bootstrap=FALSE,ppControl=NULL)
+                rfMode="buildClasses",bootstrap=FALSE,ppControl=NULL,
+                sampleVars=NULL)
 {
    # define functions used internally.
    sumSqDiff=function(x,y) { d=x-y; sum(d*d) }
@@ -154,6 +155,26 @@ yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
    refs=intersect(rownames(yall),rownames(xall))
    if (length(refs) == 0) stop ("no reference observations.")
 
+   # if sampling variables, set up xRefs and yRefs accordingly
+
+   if (!is.null(sampleVars))
+   {
+     if (length(sampleVars)>1)
+     {
+       nx = sampleVars[1]
+       ny = sampleVars[2]
+     } else {
+       nx = sampleVars
+       ny = nx
+     }
+     nx = if (nx < 1.) max(1, ncol(xall)*nx) else min(nx, ncol(xall))
+     ny = if (ny < 1.) max(1, ncol(yall)*ny) else min(ny, ncol(yall))
+     nxn = sample(1:ncol(xall),nx)
+     nyn = sample(1:ncol(yall),ny)
+     xall = xall[,nxn,drop=FALSE]
+     yall = yall[,nyn,drop=FALSE]
+   }
+   
    # if this is a bootstrap run, draw the sample.
    if (bootstrap)
    { 
@@ -170,6 +191,7 @@ yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
    }
    
    trgs=setdiff(rownames(xall),refs)
+   
   
    if (method == "gnn") # remove rows with zero sums or vegan will error off...
    {
@@ -275,7 +297,7 @@ yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
         theCols = rownames(cancor$xcoef)
 
         # scale the coefficients so that the cononical vectors will have unit variance.
-        cscal = 1/apply(xcvRefs[,theCols] %*% cancor$xcoef[,1],2,sd)
+        cscal = 1/apply(xcvRefs[,theCols,drop=FALSE] %*% cancor$xcoef[,1,drop=FALSE],2,sd)
         cancor$ycoef = cancor$ycoef * cscal
         cancor$xcoef = cancor$xcoef * cscal
       } else {                         # msnPP

@@ -1,5 +1,7 @@
 Changes in version 1.0-20:
 
+* Added sampleVars= to function yai so that X-, Y- or both kinds of variables
+can be sampled.
 * Added method="msnPP" to function yai to enable using canonical correlation via 
 projection pursuit from package ccaPP
 * Added function ensembleImpute to get an mean or median imputation for several
@@ -13,6 +15,8 @@ reps and forming one yai object.
 * Fixed a small typographical error in the help for correctBias, accomplished 
 minor edits to other help files. 
 * Added the ability to specify k in function newtargets (how did I miss that?).
+* Changed the variable importance score calculation for function yaiVarImp
+from "MeanDecreaseGini" to "MeanDecreaseAccuracy" and made it clear in the help file.
 * Added function applyMask that removes (or keeps) reference neighbors that share 
 group membership with a target. Thanks to Clara Antón Fernández for suggestions that
 lead to this function being added.

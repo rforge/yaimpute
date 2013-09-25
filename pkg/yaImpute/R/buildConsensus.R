@@ -8,7 +8,7 @@ buildConsensus <- function (reps, noTrgs=FALSE, noRefs=FALSE, k=NULL)
   
   if (length(reps) == 1) 
   {
-    warning ("only one rep, nothing to merge.")
+    warning ("only one rep, nothing to do.")
     return (reps[[1]])
   }
   

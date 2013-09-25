@@ -22,7 +22,7 @@
 \usage{
 yai(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
     nVec=NULL,pVal=.05,method="msn",ann=TRUE,mtry=NULL,ntree=500,
-    rfMode="buildClasses",bootstrap=FALSE,ppControl=NULL)
+    rfMode="buildClasses",bootstrap=FALSE,ppControl=NULL,sampleVars=NULL)
 }
 
 \arguments{
@@ -84,6 +84,12 @@ yai(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
   \item{bootstrap}{if \code{TRUE}, the reference observations are sampled with replacement.}
   \item{ppControl}{used to control how canoncial correlation analysis via 
       projection pursuit is done, see Details.}
+  \item{sampleVars}{the X- and/or Y-variables will be sampled (without replacement) 
+      if this is not NULL. If specified as a single value, that value is used to control the sample 
+      size of both X and Y variables. If two values, then the first is taken for X-variables and 
+      the second for Y-variables. If the values are less than 1.0 they are taken as the proportion 
+      of the corresponding number of variables, otherwise the number of variables to be included 
+      in the sample.}
 }
 
 \details{

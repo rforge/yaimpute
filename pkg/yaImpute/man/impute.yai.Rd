@@ -12,8 +12,8 @@
 
 \usage{
 \method{impute}{yai}(object,ancillaryData=NULL,method="closest",
-           method.factor=method,k=NULL,vars=NULL,
-           observed=TRUE,\dots)
+       method.factor=method,k=NULL,vars=NULL,
+       observed=TRUE,\dots)
 }
 
 \arguments{
@@ -84,7 +84,7 @@ plot(malImp)
 \author{
   Nicholas L. Crookston \email{ncrookston.fs@gmail.com} \cr
   Andrew O. Finley \email{finleya@msu.edu} \cr
-  Emilie Grossmann \email{Emilie.Grossmann@oregonstate.edu}
+  Emilie Henderson \email{emilie.henderson@oregonstate.edu}
 }
 
 \keyword{misc}
