@@ -52,19 +52,26 @@ buildConsensus <- function (reps, noTrgs=FALSE, noRefs=FALSE, k=NULL)
       }
     }
   }
-  rowNT = setdiff(rowNT,rowNR)
-  if (length(rowNT) == 0) 
+  if (!noTrgs) 
   {
-    rowNT = NULL
-    noTrgs = TRUE
-  }
+    rowNT = setdiff(rowNT,rowNR)
+    if (length(rowNT) == 0) 
+    {
+      rowNT = NULL
+      noTrgs = TRUE
+    }
+  } else rowNT = NULL
   
   if (noTrgs & noRefs) stop("Can't find neighbors in any objects")  
  
   #build bootstrap sample weights
+  
   cnts = table(unlist(lapply(reps,function (x) unique(x$bootstrap))))
-  wts  = length(reps)/cnts
-  names(wts) = names(cnts)
+  if (length(cnts) == 1) wts = NULL else 
+  {
+    wts  = length(reps)/cnts
+    names(wts) = names(cnts)
+  }
 
   # define an internal function to do the mergers
   mkMerge <- function (kIds,kDst,rown,nreps,wts)
@@ -91,7 +98,7 @@ buildConsensus <- function (reps, noTrgs=FALSE, noRefs=FALSE, k=NULL)
     newIds = apply(kIds,1,function (x,wts) 
       {
         cnts = table(x)
-        names(which.max(cnts*wts[names(cnts)]))       
+        if (is.null(wts)) names(which.max(cnts)) else names(which.max(cnts*wts[names(cnts)]))       
       }, wts)
     newDst = vector("numeric",length(newIds))
 
