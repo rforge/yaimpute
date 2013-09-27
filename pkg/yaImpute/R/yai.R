@@ -159,20 +159,25 @@ yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
 
    if (!is.null(sampleVars))
    {
-     if (length(sampleVars)>1)
+     if (length(sampleVars) == 1 && is.null(names(sampleVars))) sampleVars=rep(sampleVars,2)
+     names(sampleVars) = if (is.null(names(sampleVars))) c("X","Y") else 
+                             toupper(names(sampleVars))
+     nx = match("X",names(sampleVars))
+     ny = match("Y",names(sampleVars))
+     nx = if (!is.na(nx)) sampleVars[nx] else 0
+     ny = if (!is.na(ny)) sampleVars[ny] else 0
+     if (nx > 0)
      {
-       nx = sampleVars[1]
-       ny = sampleVars[2]
-     } else {
-       nx = sampleVars
-       ny = nx
+       nx = if (nx < 1.) max(1, ncol(xall)*nx) else min(nx, ncol(xall))
+       nxn = sample(1:ncol(xall),nx)
+       xall = xall[,nxn,drop=FALSE]
      }
-     nx = if (nx < 1.) max(1, ncol(xall)*nx) else min(nx, ncol(xall))
-     ny = if (ny < 1.) max(1, ncol(yall)*ny) else min(ny, ncol(yall))
-     nxn = sample(1:ncol(xall),nx)
-     nyn = sample(1:ncol(yall),ny)
-     xall = xall[,nxn,drop=FALSE]
-     yall = yall[,nyn,drop=FALSE]
+     if (ny > 0)
+     {
+       ny = if (ny < 1.) max(1, ncol(yall)*ny) else min(ny, ncol(yall))
+       nyn = sample(1:ncol(yall),ny)
+       yall = yall[,nyn,drop=FALSE]
+     }
    }
    
    # if this is a bootstrap run, draw the sample.

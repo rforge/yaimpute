@@ -85,11 +85,13 @@ yai(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
   \item{ppControl}{used to control how canoncial correlation analysis via 
       projection pursuit is done, see Details.}
   \item{sampleVars}{the X- and/or Y-variables will be sampled (without replacement) 
-      if this is not NULL. If specified as a single value, that value is used to control the sample 
-      size of both X and Y variables. If two values, then the first is taken for X-variables and 
-      the second for Y-variables. If the values are less than 1.0 they are taken as the proportion 
-      of the corresponding number of variables, otherwise the number of variables to be included 
-      in the sample.}
+      if this is not NULL and greater than zero. If specified as a single unnamed value, 
+      that value is used to control the sample size of both X and Y variables. If two unnamed values, 
+      then the first is taken for X-variables and the second for Y-variables. 
+      If zero, no sampling is done. Otherwise, values are less than 1.0 they are taken as 
+      the proportion of the number of variables. Values greater or equal to 1 are number of 
+      variables to be included in the sample. Specification of a large number will cause the 
+      sequence of variables to be randomized.}
 }
 
 \details{
