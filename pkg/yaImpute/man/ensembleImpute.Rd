@@ -14,7 +14,7 @@ ensembleImpute(imputes, method="mean",\dots)
 
 \arguments{
   \item{imputes}{a list of objects class \code{\link{impute.yai}} or \code{\link{yai}}. 
-        Function \code{\link{impute.yai}} is called for those that where class is yai.}
+        Function \code{\link{impute.yai}} is called for list members where the class is yai.}
   \item{method}{when "mean", the continuous variables are averaged using \code{mean},
         otherwise the \code{median} is used. Mode is always used for character data 
         (generally the case for factors).}
@@ -22,17 +22,17 @@ ensembleImpute(imputes, method="mean",\dots)
 }
 
 \value{
-  A named lis, as follows:
+  An object of class \code{c("impute.yai","data.frame")}, see \code{\link{impute.yai}}.
+  The attributes of the data.frame include the following:
   \itemize{
-    \item{\code{ave }}{the mean, median, or mode of the imputed values for 
-      all observations (and variables) found in the input list.}
-    \item{\code{sd }}{the corresponding standard deviations for continuous variables
+    \item{\code{sd }}{A data.frame of standard deviations for continuous variables
        if there are any. The columns are not reported if the standard deviation is
        zero for all observations which is typically true of "observed" values. }
     \item{\code{N }}{the number of replictions used to compute the corresponding data; 
        reported only if the number differs from the total number of replications. This 
        will be the case when \code{bootstrap}, \code{sampleVar}, or both are used in 
-       \code{\link{impute.yai}}}
+       \code{\link{yai}}.}
+    \item{\code{methods }}{the method used for each variable.}
   }   
 }
 

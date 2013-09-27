@@ -4,8 +4,9 @@ ensembleImpute <- function (imputes,method="mean",...)
   posM = c("mean","median")
   if (!(method %in% posM)) stop ('method="',method,'" must be one of ',paste0('"',posM,'"',collapse=", "))
 
-  for (i in 1:length(imputes)) if (class(imputes[[i]]) == "yai") 
+  for (i in 1:length(imputes)) if (("yai" %in% class(imputes[[i]])))
     imputes[[i]] = impute.yai(imputes[[i]],...)
+
   colns = unique(unlist(lapply(imputes,function(x) colnames(x))))
   ctf = if (method!="mean") median else mean
   rowns = sort(unique(unlist(lapply(imputes,function (x) rownames(x)))))
@@ -26,6 +27,7 @@ ensembleImpute <- function (imputes,method="mean",...)
           x = na.omit(x)
           if (length(x) == 0) return(NA)
           x = table(x)
+          x = x+(runif(length(x))*.01)
           names(x)[which.max(x)]
         })
       ave[[cl]] = as.factor(ave[[cl]])
@@ -41,9 +43,9 @@ ensembleImpute <- function (imputes,method="mean",...)
       methods[[cl]] = method
     }
   }
-  ave = as.data.frame(ave)
-  rownames(ave) = rowns
-  ans = list(ave=ave)
+  ans = as.data.frame(ave)
+  rownames(ans) = rowns
+  class(ans) = c("impute.yai","data.frame")
   if (length(sd)>0) 
   {
     sumsgtz = unlist(lapply(sd,sum)) > 0
@@ -51,11 +53,11 @@ ensembleImpute <- function (imputes,method="mean",...)
     {
       sd = as.data.frame(sd[sumsgtz])
       rownames(sd) = rowns
-      ans$sd = sd
+      attr(ans,"sd") = sd
     }
-  }
-  ans$N = if (length(N)>0) as.data.frame(N) else length(imputes)
-  ans$methods = unlist(methods)
+  } 
+  attr(ans,"N") = if (length(N)>0) as.data.frame(N) else length(imputes)
+  attr(ans,"methods") = unlist(methods)
   ans  
 }  
 

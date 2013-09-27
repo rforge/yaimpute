@@ -1,7 +1,6 @@
 Changes in version 1.0-20:
 
-* Added sampleVars= to function yai so that X-, Y- or both kinds of variables
-can be sampled.
+* Added method="median" to function impute.
 * Added method="msnPP" to function yai to enable using canonical correlation via 
 projection pursuit from package ccaPP
 * Added function ensembleImpute to get an mean or median imputation for several
@@ -9,8 +8,11 @@ separate imputations. Computes the mode for factors.
 * Added John Coulston as an author on some of the new functions.
 * Added bootstrap= option to yai() so that reference observations can 
 be sampled with replacement forming a bootstrap rep.
+* Added sampleVars= to function yai so that X-, Y- or both kinds of variables
+can be sampled.
 * Added function buildConsensus() to find a consensus imputation over several 
 reps and forming one yai object. 
+* Addied the ability to specify the scaling values for rmsd.yai and compare.yai
 * Modified some help files to improve acknowledgements and cross references.
 * Fixed a small typographical error in the help for correctBias, accomplished 
 minor edits to other help files. 
