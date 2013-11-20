@@ -13,6 +13,10 @@ function (...,ancillaryData=NULL,vars=NULL,wts=NULL)
   }
   
   okClasses <- c("yai","impute.yai","data.frame","matrix","lm")
+  if (!is.null(wts)) 
+  {
+    if (any(wts < 0) || sum(wts) <= 0) stop("wts must be positive and sum > 0")
+  }
 
   mgd <- rep(NA,length(args))
   names(mgd) <- names(args)
@@ -92,28 +96,28 @@ function (...,ancillaryData=NULL,vars=NULL,wts=NULL)
       warning("rank deficiency in ",objName," was addressed by removing: ",
              paste0(c(colnames(ob)[qr$pivot[(qr$rank+1):length(qr$pivot)]],
                       colnames(pr)[qr$pivot[(qr$rank+1):length(qr$pivot)]]),collapse=", "))
-     
+
     p <- solve(chol(cov(ob[,uvars,drop=FALSE])))
     ob <- as.matrix(ob[,uvars]) %*% p
     pr <- as.matrix(pr[,uvars]) %*% p
- 
-    gend <- apply(pr-ob,2,function (x) sqrt(mean(x*x)))
-  
-    gend <- if (is.null(wts)) mean(gend) else 
+
+    wt <- wts
+    wt <- if (is.null(wt)) rep(1,ncol(pr)) else 
       {
-        if (length(names(wts)) > 0) 
+        if (length(names(wt)) > 0) 
         {
-          names(wts)  <- sub(".o$","",names(wts))
-          names(gend) <- sub(".o$","",names(gend))
-          wts <- na.omit(wts[names(gend)])
+          names(wt)  <- sub(".o$","",names(wt))
+          wt <- na.omit(wt[names(pr)])
         }
-        if (length(wts) != length(gend)) 
+        if (length(wt) != ncol(pr)) 
         {
           warning ("weights do not match variables in ",objName," and were ignored.")
-          mean(gend)
-        } else weighted.mean(gend,w=wts)
+          wt <- rep(1,ncol(pr))
+        }
+        wt
       }
-    mgd[objName] <- gend
+    wt <- wt/sum(wt) 
+    mgd[objName]  <- sqrt(mean(apply((pr-ob),1,function (x,wt) sum((x^2)*wt), wt)))
   }
   sort(mgd)
 }

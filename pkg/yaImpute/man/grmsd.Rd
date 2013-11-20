@@ -4,7 +4,9 @@
 
 \description{
 Computes the root mean square distance between predicted and corresponding
-observed values in an orthoganal multivariate space. This statistic provides a way to
+observed values in an orthogonal multivariate space. This value is the 
+Mahalanobis distance between observed and imputed values in a space defined by
+variables were observed and predicted are measured. The statistic provides a way to
 compare imputation (or prediction) results. While it is designed to work with
 imputation, the function can be used objects that inherit from \code{\link{lm}}
 or with matrices and data frames that follow the column naming convention
@@ -30,8 +32,9 @@ grmsd(\dots,ancillaryData=NULL,vars=NULL,wts=NULL)
 
 \details{ 
   This function is designed to compute the root mean square distance between observed
-  and predicted observations over several variables at once. 
-  It is similar to a Mahalanobis distance. Here are some notable characteristics.
+  and predicted observations over several variables at once. It is the Mahalanobis 
+  distance between variables, but the name emphasizes the similarities to root mean 
+  square difference (or error, see \code{\link{rmsd}}). Here are some notable characteristics.
   
   \enumerate{
     \item{In the univariate case this function returns the same value as 
@@ -40,10 +43,12 @@ grmsd(\dots,ancillaryData=NULL,vars=NULL,wts=NULL)
       has been called on the variable.}
     \item{Like \code{\link{rmsd}}, \code{grmsd} is zero if the imputed values are
       exactly the same as the observed values over all variables.}
-    \item{Like \code{\link{rmsd}}, \code{grmsd} is 1.0 when the mean of each 
-      variable is imputed in place of a near neighbor. This situation corresponds 
+    \item{Like \code{\link{rmsd}}, \code{grmsd} is ~1.0 when the mean of each 
+      variable is imputed in place of a near neighbor (it would be exactly 1.0 if 
+      the maximum likelihood estimate of the covariance were used rather than
+      the unbiased estimate, see \code{\link{cov.wt}}. This situation corresponds 
       to regression where the slope is zero. It indicates that the imputation 
-      error is, over all, the same as it would be if the means of the varialbes 
+      error is, over all, the same as it would be if the means of the variables 
       were imputed rather than a near neighbor (it does not signal that the means 
       were imputed).} 
     \item{Like \code{\link{rmsd}}, values of grmsd > 1.0 indicate that, on average,
@@ -51,7 +56,9 @@ grmsd(\dots,ancillaryData=NULL,vars=NULL,wts=NULL)
       of the corresponding variables were imputed for each observation.} 
     \item{Note that individual \code{\link{rmsd}} values can be computed even when 
       the variance of the variable is zero. In contrast, \code{grmsd} can 
-      only be computed in the situation where the observed data matrix is full rank.}
+      only be computed in the situation where the observed data matrix is full rank.
+      Rank is determined using \code{\link{qr}} and columns are removed from the 
+      analysis to create this condition if necessary (with a warning). }
   }
   
   Observed and predicted are matched using the column names. Column names
@@ -66,11 +73,6 @@ grmsd(\dots,ancillaryData=NULL,vars=NULL,wts=NULL)
   When objects inherit from \code{\link{lm}}, a suitable matrix is formed using
   by calling the \code{\link{predict}} and \code{\link{resid}} functions.
   
-  As noted above, the generalized distance can only be computed when the 
-  observed data is full rank. Rank is determined using \code{\link{qr}} and 
-  columns are removed from the analysis to create this condition if 
-  necessary (with a warning). 
- 
   Factors, if found, are removed (with a warning).
   
   When argument \code{wts} is defined there must be one value for each pair of
@@ -81,8 +83,8 @@ grmsd(\dots,ancillaryData=NULL,vars=NULL,wts=NULL)
 }
 
 \value{
-A sorted named vector of generalized root mean square distances where names are taken from the 
-arguments.
+A sorted named vector of generalized root mean square distances where names 
+are taken from the arguments.
 }
 
 \seealso{
@@ -119,18 +121,19 @@ grmsd(msn,mal,ancillaryData=iris)
 impMean <- y 
 colnames(impMean) <- paste0(colnames(impMean),".o")
 impMean <- cbind(impMean,y)
-impMean[,3] <- mean(impMean[,3])
-impMean[,4] <- mean(impMean[,4])
+# set the predictions to the mean's of the variables
+impMean[,"Petal.Length"] <- mean(impMean[,"Petal.Length"])
+impMean[,"Petal.Width"]  <- mean(impMean[,"Petal.Width"])
 
 grmsd(msn, mal, lmFit=lm(as.matrix(y) ~ ., data=x[refs,]), impMean )
 
-# compare to using function rmsd:
+# compare to using function rmsd (values match):
 msnimp <- na.omit(impute(msn))
-grmsd(msnimp[,c(1,3)])           # values match
-rmsd(msnimp[,c(1,3)],scale=TRUE)
+grmsd(msnimp[,c("Petal.Length","Petal.Length.o")])   
+rmsd(msnimp[,c("Petal.Length","Petal.Length.o")],scale=TRUE)
 
 # these are multivariate cases and they don't match
-# because the covariance of the two is > 0.
+# because the covariance of the two variables is > 0.
 grmsd(msnimp)
 colSums(rmsd(msnimp,scale=TRUE))/2
 
