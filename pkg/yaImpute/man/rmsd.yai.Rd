@@ -1,5 +1,6 @@
 \name{rmsd.yai}
 \alias{rmsd.yai}
+\alias{rmsd}
 
 \title{Root Mean Square Difference between observed and imputed}
 

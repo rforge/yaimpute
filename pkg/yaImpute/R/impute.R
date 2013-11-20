@@ -205,7 +205,11 @@ impute.yai <- function (object,ancillaryData=NULL,method="closest",
          if (object$method != "randomForest") vars <- yvars(object)
          else if (names(object$ranForest)[[1]] == "unsupervised") vars <- xvars(object)
       }            
-      else vars <- colnames(ancillaryData)
+      else 
+      {
+        if (! is.data.frame(ancillaryData)) ancillaryData <- as.data.frame(ancillaryData)
+        vars <- colnames(ancillaryData)
+      }
    }
    posMethods <- c("closest","mean","median","dstWeighted")
    if (length(intersect(method,posMethods))==0)

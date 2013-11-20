@@ -10,7 +10,7 @@
 # Value:
 #   A data frame with the rownames as vars and the column as RMSD
 
-rmsd.yai = function (object,vars=NULL,scale=FALSE,...)
+rmsd.yai <- function (object,vars=NULL,scale=FALSE,...)
 {
    if (missing(object)) stop ("object required.")
    if (class(object)[1] == "yai") object = impute.yai(object,vars=vars,observed=TRUE,...)
@@ -54,3 +54,7 @@ rmsd.yai = function (object,vars=NULL,scale=FALSE,...)
    if (length(usedScale) > 0) attr(rmsd,"scale") = unlist(usedScale)
    rmsd
 }
+
+rmsd <- rmsd.yai
+
+

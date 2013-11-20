@@ -1,6 +1,6 @@
 \name{yaiVarImp}
 \alias{yaiVarImp}
-\title{Reports or plots importance scores for method randomForest}
+\title{Reports or plots importance scores for yai method randomForest}
 
 \description{
   When method \code{randomforest} is used to build a \code{\link{yai}}
@@ -60,7 +60,6 @@ compare.yai(rf,rf2)
 
 \author{
   Nicholas L. Crookston \email{ncrookston.fs@gmail.com} \cr
-  Andrew O. Finley \email{finleya@msu.edu}
 }
 
 \keyword{misc}
