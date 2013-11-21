@@ -4,7 +4,7 @@
 
 \description{
 Computes the root mean square distance between predicted and corresponding
-observed values in an orthogonal multivariate space. This value is the 
+observed values in an orthogonal multivariate space. This value is the mean
 Mahalanobis distance between observed and imputed values in a space defined by
 variables were observed and predicted are measured. The statistic provides a way to
 compare imputation (or prediction) results. While it is designed to work with
@@ -14,27 +14,32 @@ described in the details.
 }
 
 \usage{
-grmsd(\dots,ancillaryData=NULL,vars=NULL,wts=NULL)
+grmsd(\dots,ancillaryData=NULL,vars=NULL,wts=NULL,rtnVectors=FALSE)
 }
 
 \arguments{
   \item{\dots}{objects created by any combination of
     \code{\link{yai}}, \code{\link{impute.yai}}, \code{\link{ensembleImpute}},
     \code{\link{buildConsensus}}, \code{\link{lm}} and data frames or matrices
-    that follow the column naming convention described in details.}
+    that follow the column naming convention described in details. If an object
+    is of class \code{\link{yai}}, a call to \code{\link{impute.yai}} is generated.}
   \item{ancillaryData}{a data frame that defines variables, passed to 
     \code{\link{impute.yai}}.}
   \item{vars}{a list of variable names you want to include; if NULL all available
-    variables are included.}
+    variables are included (note that if code{\link{impute.yai}} the 
+    \emph{Y}-variables are returned when \code{vars=NULL}).}
   \item{wts}{A vector of weights used to compute the mean distances, see 
     details below.}
+  \item{rtnVectors}{The vectors of individual distances are returned (see Value) 
+    rather than the mean Mahalanobis distance.} 
 }
 
 \details{ 
   This function is designed to compute the root mean square distance between observed
   and predicted observations over several variables at once. It is the Mahalanobis 
-  distance between variables, but the name emphasizes the similarities to root mean 
-  square difference (or error, see \code{\link{rmsd}}). Here are some notable characteristics.
+  distance between observed and predicted but the name emphasizes the similarities 
+  to root mean square difference (or error, see \code{\link{rmsd}}). 
+  Here are some notable characteristics.
   
   \enumerate{
     \item{In the univariate case this function returns the same value as 
@@ -46,10 +51,10 @@ grmsd(\dots,ancillaryData=NULL,vars=NULL,wts=NULL)
     \item{Like \code{\link{rmsd}}, \code{grmsd} is ~1.0 when the mean of each 
       variable is imputed in place of a near neighbor (it would be exactly 1.0 if 
       the maximum likelihood estimate of the covariance were used rather than
-      the unbiased estimate, see \code{\link{cov.wt}}. This situation corresponds 
+      the unbiased estimate, it approaches 1 a n gets large.) This situation corresponds 
       to regression where the slope is zero. It indicates that the imputation 
       error is, over all, the same as it would be if the means of the variables 
-      were imputed rather than a near neighbor (it does not signal that the means 
+      were imputed rather than near neighbors (it does not signal that the means 
       were imputed).} 
     \item{Like \code{\link{rmsd}}, values of grmsd > 1.0 indicate that, on average,
       the errors in the imputation are greater than they would be if the mean
@@ -78,13 +83,16 @@ grmsd(\dots,ancillaryData=NULL,vars=NULL,wts=NULL)
   When argument \code{wts} is defined there must be one value for each pair of
   observed and predicted variables. If the values are named (preferred), then
   the names are matched to the names of predicted variables (no \code{.o} suffix).
-  The matched values are used to compute weighted average distances using
-  function \code{\link{weighted.mean}}.
+  The matched values effectively scale the axes in which distances are computed. 
+  When this is done, the resulting distance are not Mahalanobis distances.
 }
 
 \value{
-A sorted named vector of generalized root mean square distances where names 
-are taken from the arguments.
+When \code{rtnVectors=FALSE}, a sorted named vector of mean Mahalanobis distances 
+is returned; the names are taken from the arguments.
+
+When \code{rtnVectors=TRUE} the function returns vectors of distances, sorted and
+named as done wnen this argument is FALSE.
 }
 
 \seealso{
@@ -137,12 +145,17 @@ rmsd(msnimp[,c("Petal.Length","Petal.Length.o")],scale=TRUE)
 grmsd(msnimp)
 colSums(rmsd(msnimp,scale=TRUE))/2
 
+# get the vectors and make a boxplot, identify outliers
+stats <- boxplot(grmsd(msn,mal,ancillaryData=iris[,-5],rtnVectors=TRUE),
+                 ylab="Mahalanobis distance")
+stats$out
+#     118      132 
+#2.231373 1.990961 
 }
 
 
 \author{
-  Nicholas L. Crookston \email{ncrookston.fs@gmail.com}\cr
-  John Coulston \email{jcoulston@fs.fed.us}
+  Nicholas L. Crookston \email{ncrookston.fs@gmail.com}
 }
 
 \keyword{multivariate}

@@ -1,5 +1,5 @@
 grmsd <- 
-function (...,ancillaryData=NULL,vars=NULL,wts=NULL)
+function (...,ancillaryData=NULL,vars=NULL,wts=NULL,rtnVectors=FALSE)
 {
   if (missing(...)) stop ("... required")
 
@@ -18,8 +18,7 @@ function (...,ancillaryData=NULL,vars=NULL,wts=NULL)
     if (any(wts < 0) || sum(wts) <= 0) stop("wts must be positive and sum > 0")
   }
 
-  mgd <- rep(NA,length(args))
-  names(mgd) <- names(args)
+  mgd <- list()
   for (objName in names(args))
   {
     object <- args[[objName]]
@@ -116,8 +115,13 @@ function (...,ancillaryData=NULL,vars=NULL,wts=NULL)
         }
         wt
       }
-    wt <- wt/sum(wt) 
-    mgd[objName]  <- sqrt(mean(apply((pr-ob),1,function (x,wt) sum((x^2)*wt), wt)))
+    wt <- wt/sum(wt)
+    md <- apply((pr-ob),1,function (x,wt) sum((x^2)*wt), wt)
+    mgd[[objName]] <- if (rtnVectors) sqrt(md) else sqrt(mean(md))
   }
-  sort(mgd)
+  if (rtnVectors) 
+  { 
+    idx <- sort(unlist(lapply(mgd,function (x) sqrt(mean(x)))),index.return=TRUE)$ix
+    mgd <- mgd[idx]
+  } else sort(unlist(mgd))
 }

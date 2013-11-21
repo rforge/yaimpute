@@ -5,7 +5,7 @@ include to aid in understanding the results; bestVars() returns what seem to be
 a set of "best" variables.
 * Added grmsd() to compute a generalized root mean square error which is a Mahalanobis
 distance between observed and imputed. Provides a single score useful for ranking
-imputation models and methods.
+imputation models and methods (or returns vectors of distances).
 * Added rmsd(); it is an alias to rmsd.yai().
 * Added method="median" to function impute.
 * Added method="msnPP" to function yai to enable using canonical correlation via 
@@ -29,6 +29,8 @@ from "MeanDecreaseGini" to "MeanDecreaseAccuracy" and made it clear in the help 
 * Added function applyMask() that removes (or keeps) reference neighbors that share 
 group membership with a target. Thanks to Clara Antón Fernández for suggestions that
 lead to this function being added.
+* Small update to the COPYRIGHTS file to make clear that Andrew O. Finley wrote
+annImpute.cpp
 
 Changes in version 1.0-19:
 
