@@ -22,6 +22,7 @@ notablyDifferent,
 notablyDistant,
 plot.notablyDifferent, 
 plot.varSel,
+predict.yai,
 rmsd, 
 rmsd.yai, 
 unionDataJoin,
@@ -40,6 +41,7 @@ S3method(plot, impute.yai)
 S3method(plot, notablyDifferent)
 S3method(plot, varSel)
 S3method(plot, yai)
+S3method(predict, yai)
 S3method(print, yai)
 S3method(summary, yai)
 

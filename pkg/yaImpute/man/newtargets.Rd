@@ -15,7 +15,8 @@ newtargets(object,newdata,k=NULL,ann=NULL)
 \arguments{
   \item{object}{an object of class \code{\link{yai}}.}
   \item{newdata}{a data frame or matrix of new \emph{targets} for which neighbors are
-       are found.}
+       are found. Must include at least the \emph{X}-variables used in the original call to
+       \code{\link{yai}}.}
   \item{k}{if NULL, the value is taken from \code{object}, otherwise the number of nearest 
        neighbors to find.}
   \item{ann}{if NULL, the value is taken from \code{object}. When TRUE \code{\link{ann}} is

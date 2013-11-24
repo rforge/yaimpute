@@ -2,7 +2,7 @@ Changes in version 1.0-20:
 
 * Added varSelection() to aid in variable selection. A plot function is 
 include to aid in understanding the results; bestVars() returns what seem to be
-a set of "best" variables.
+a set of "best" variables for objects created by varSelection().
 * Added grmsd() to compute a generalized root mean square error which is a Mahalanobis
 distance between observed and imputed. Provides a single score useful for ranking
 imputation models and methods (or returns vectors of distances).
@@ -19,6 +19,7 @@ be sampled with replacement forming a bootstrap rep.
 can be sampled.
 * Added buildConsensus() to find a consensus imputation over several 
 reps and forming one yai object. 
+* Added (at long last) a predict function.
 * Added the ability to specify the scaling values for rmsd.yai and compare.yai
 * Modified some help files to improve acknowledgments and cross references.
 * Fixed a small typographical error in the help for correctBias(), accomplished 
