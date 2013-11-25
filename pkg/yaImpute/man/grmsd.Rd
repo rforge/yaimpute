@@ -6,11 +6,11 @@
 Computes the root mean square distance between predicted and corresponding
 observed values in an orthogonal multivariate space. This value is the mean
 Mahalanobis distance between observed and imputed values in a space defined by
-variables were observed and predicted are measured. The statistic provides a way to
-compare imputation (or prediction) results. While it is designed to work with
-imputation, the function can be used objects that inherit from \code{\link{lm}}
-or with matrices and data frames that follow the column naming convention
-described in the details.
+observations and variables were observed and predicted values are defined. 
+The statistic provides a way to compare imputation (or prediction) results. 
+While it is designed to work with imputation, the function can be used with objects 
+that inherit from \code{\link{lm}} or with matrices and data frames that 
+follow the column naming convention described in the details.
 }
 
 \usage{
@@ -21,8 +21,9 @@ grmsd(\dots,ancillaryData=NULL,vars=NULL,wts=NULL,rtnVectors=FALSE)
   \item{\dots}{objects created by any combination of
     \code{\link{yai}}, \code{\link{impute.yai}}, \code{\link{ensembleImpute}},
     \code{\link{buildConsensus}}, \code{\link{lm}} and data frames or matrices
-    that follow the column naming convention described in details. If an object
-    is of class \code{\link{yai}}, a call to \code{\link{impute.yai}} is generated.}
+    that follow the column naming convention described in the details below. 
+    If an object is of class \code{\link{yai}}, a call to 
+    \code{\link{impute.yai}} is generated internally.}
   \item{ancillaryData}{a data frame that defines variables, passed to 
     \code{\link{impute.yai}}.}
   \item{vars}{a list of variable names you want to include; if NULL all available
@@ -51,11 +52,11 @@ grmsd(\dots,ancillaryData=NULL,vars=NULL,wts=NULL,rtnVectors=FALSE)
     \item{Like \code{\link{rmsd}}, \code{grmsd} is ~1.0 when the mean of each 
       variable is imputed in place of a near neighbor (it would be exactly 1.0 if 
       the maximum likelihood estimate of the covariance were used rather than
-      the unbiased estimate, it approaches 1 a n gets large.) This situation corresponds 
-      to regression where the slope is zero. It indicates that the imputation 
-      error is, over all, the same as it would be if the means of the variables 
-      were imputed rather than near neighbors (it does not signal that the means 
-      were imputed).} 
+      the unbiased estimate -- it approaches 1 as \emph{n} gets large.) 
+      This situation corresponds to regression where the slope is zero. 
+      It indicates that the imputation error is, over all, the same as it 
+      would be if the means of the variables were imputed rather than near 
+      neighbors (it does not signal that the means were imputed).} 
     \item{Like \code{\link{rmsd}}, values of grmsd > 1.0 indicate that, on average,
       the errors in the imputation are greater than they would be if the mean
       of the corresponding variables were imputed for each observation.} 
@@ -84,11 +85,11 @@ grmsd(\dots,ancillaryData=NULL,vars=NULL,wts=NULL,rtnVectors=FALSE)
   observed and predicted variables. If the values are named (preferred), then
   the names are matched to the names of predicted variables (no \code{.o} suffix).
   The matched values effectively scale the axes in which distances are computed. 
-  When this is done, the resulting distance are not Mahalanobis distances.
+  When this is done, the resulting distances are not Mahalanobis distances.
 }
 
 \value{
-When \code{rtnVectors=FALSE}, a sorted named vector of mean Mahalanobis distances 
+When \code{rtnVectors=FALSE}, a sorted named vector of mean distances 
 is returned; the names are taken from the arguments.
 
 When \code{rtnVectors=TRUE} the function returns vectors of distances, sorted and
