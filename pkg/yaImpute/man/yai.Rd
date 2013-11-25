@@ -148,9 +148,9 @@ has two named components.
     when method msn or msn2 is used (NULL otherwise).}
   \item{yScale, xScale}{scale data used on yRefs and xRefs as needed.}
   \item{k}{the value of \emph{k}.}
-  \item{pVal}{as input; only used when method \code{msn} or \code{msn2} is used.}
-  \item{projector}{NULL when not used. For methods \emph{msn}, \emph{msn2}, \emph{gnn}
-     and \emph{mahalanobis}, this is a matrix that projects normalized X-variables
+  \item{pVal}{as input; only used when method \code{msn}, \code{msn2} or \code{msnPP} is used.}
+  \item{projector}{NULL when not used. For methods \code{msn}, \code{msn2}, \code{msnPP}, \code{gnn}
+     and \code{mahalanobis}, this is a matrix that projects normalized X-variables
      into a space suitable for doing Eculidian distances.}
   \item{nVec}{number of canonical vectors used (methods \code{msn} and \code{msn2}),
      or number of independent X-variables in the reference data when method
