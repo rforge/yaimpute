@@ -1,10 +1,10 @@
 predict.yai <- 
-function(x,newdata,...)
+function(object,newdata,...)
 {
-  if (missing(newdata)) impute.yai(x,...) else 
+  if (missing(newdata)) impute.yai(object,...) else 
   { 
     al <- list(...)
-    impute.yai(newtargets(x,newdata,al$k,al$ann),...)
+    impute.yai(newtargets(object,newdata,al$k,al$ann),...)
   }
 }
 

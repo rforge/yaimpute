@@ -5,11 +5,11 @@
 \description{Provides a generic interface for getting predicted values for \code{\link{yai}} objects.}
 
 \usage{
-\method{predict}{yai}(x,newdata,\dots)
+\method{predict}{yai}(object,newdata,\dots)
 }
 
 \arguments{
-  \item{x}{an object of class \code{\link{yai}} which is passed as argument to 
+  \item{object}{an object of class \code{\link{yai}} which is passed as argument to 
     \code{\link{newtargets}}, \code{\link{impute.yai}}, or both of these functions, see details.}
   \item{newdata}{a data frame that at a minimum contains the \emph{X}-variables for 
     new observations.}
@@ -21,7 +21,7 @@ When argument \code{newdata} is present function \code{\link{newtargets}} is cal
 call to \code{\link{impute.yai}}. If include in the \dots, the arguments \code{k} and \code{ann} 
 are passed to \code{\link{newtargets}}. 
 
-When argument \code{newdata} is absent, \code{\link{impute.yia}} is called without first calling
+When argument \code{newdata} is absent, \code{\link{impute.yai}} is called without first calling
 \code{\link{newtargets}}.
 
 All of the \dots arguments are passed to \code{\link{impute.yai}}.
