@@ -1,7 +1,6 @@
 =====ANN-related files =============
 All files contained in directory /src (with the exception of rfoneprox.cpp
-and annImpute.cpp)
-carry this copyright statement:
+and annImpute.cpp) carry this copyright statement:
 ====================================
 // Copyright (c) 1997-2005 University of Maryland and Sunil Arya and
 // David Mount.  All Rights Reserved.
