@@ -20,6 +20,26 @@ function (x,y,method="addVars",yaiMethod="msn",wts=NULL,
 
   myapply <- if (pPresent) mclapply else lapply
   
+  # load required packages...this is done here so that forked will
+  # processes will have the required packages...different logic is needed
+  # to support parallel on windows.
+  if (yaiMethod == "gnn") # (GNN), make sure we have package vegan loaded
+  {
+    if (!require (vegan)) stop("install vegan and try again")
+  }
+  if (yaiMethod == "ica") # (ica), make sure we have package fastICA loaded
+  {
+    if (!require (fastICA)) stop("install fastica and try again")
+  }
+  if (yaiMethod == "randomForest") # make sure we have package randomForest loaded
+  {
+    if (!require (randomForest)) stop("install randomForest and try again")
+  }     
+  if (yaiMethod == "msnPP") # make sure we have package ccaPP loaded
+  {
+    if (!require (ccaPP)) stop("install ccaPP and try again")
+  }
+  
   # single variable elimination logic:
   if (method=="delVars")    
   {
@@ -96,8 +116,8 @@ plot.varSel <- function (x,main=NULL,nbest=NULL,arrows=TRUE,...)
   if (!inherits(x,"varSel")) stop ("class of x must be varSel")
   if (is.null(main)) main <- 
     switch(x$method, addVars="Mean distance as variables are added",
-                       delVars="Mean distance as variables are removed",
-                       stop("method '",x$method,"' not found in x"))
+                     delVars="Mean distance as variables are removed",
+                     stop("method '",x$method,"' not found in x"))
   if (is.null(nbest)) nbest <- length(bestVars(x))
   bcc <- rep(gray(.35),length(x$allgrmsd))
   if (is.null(x$remVars)) bcc[1:nbest] <- "black" else 
