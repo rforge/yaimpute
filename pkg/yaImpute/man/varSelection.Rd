@@ -80,7 +80,9 @@ time such that those that remain provide the smallest
 }
 
 \seealso{
-\code{\link{yai}}, \code{\link{impute.yai}} and \code{\link{grmsd}} }
+\code{\link{yai}}, \code{\link{impute.yai}}, \code{\link{bestVars}} and 
+\code{\link{grmsd}} 
+}
 
 \examples{
 data(iris)
