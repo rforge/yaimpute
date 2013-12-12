@@ -174,8 +174,7 @@ has two named components.
 }
 
 \seealso{
-\code{\link{applyMask}} \code{\link{correctBias}} \code{\link{buildConsensus}}  
-\code{\link{ensembleImpute}}
+\code{\link{grmsd}} \code{\link{ensembleImpute}} 
 }
 
 
@@ -202,8 +201,14 @@ mal <- yai(x=x,y=y,method="mahalanobis")
 # use projection pursuit and specify ppControl (loads package ccaPP)
 msnPP <- yai(x=x,y=y,method="msnPP",ppControl=c(method="kendall",search="proj"))
 
+# compare these results using the generalized mean distances. mal wins!
+grmsd(mal,msnPP,msn)
+
+
+#############
 # running the following examples will load packages vegan
 # and randomForest, and are more complicated.
+#############
 
 data(MoscowMtStJoe)
 
@@ -223,7 +228,11 @@ mal <- yai(x=x, y=y, method="mahalanobis", k=1)
 gnn <- yai(x=x, y=y, method="gnn", k=1)
 msn <- yai(x=x, y=y, method="msn", k=1)
 
+# the results can be plotted.
 plot(mal,vars=yvars(mal)[1:16])
+
+# compare these results using the generalized mean distances..
+grmsd(mal,gnn,msn)
 
 # reduce the plant community data for randomForest.
 yba  <- MoscowMtStJoe[,1:17]
@@ -234,7 +243,7 @@ rf <- yai(x=x, y=ybaB, method="randomForest", k=1)
 # build the imputations for the original y's
 rforig <- impute(rf,ancillaryData=y)
 
-# compare the results
+# compare the results using individual rmsd's
 compare.yai(mal,gnn,msn,rforig)
 plot(compare.yai(mal,gnn,msn,rforig))
 

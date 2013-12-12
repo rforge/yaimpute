@@ -122,6 +122,6 @@ function (...,ancillaryData=NULL,vars=NULL,wts=NULL,rtnVectors=FALSE)
   if (rtnVectors) 
   { 
     idx <- sort(unlist(lapply(mgd,function (x) sqrt(mean(x)))),index.return=TRUE)$ix
-    mgd <- mgd[idx]
+    mgd[idx]
   } else sort(unlist(mgd))
 }

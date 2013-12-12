@@ -1,3 +1,12 @@
+Changes in version 1.0-21:
+
+* Fixed two long-standing bugs in AsciiGridImpute and AsciiGridPredict. One was
+that the output grid headers would not be output correctly when the nodata 
+argument was used and the other delt with a problem when predict returned a matrix.
+* Modified the examples in AsciiGridImpute so that they use a tempdir() for output files.
+* Added the use of grmsd() in the examples in yai().
+* Fixed return value in grmsd() when argument rtnVectors is TRUE
+
 Changes in version 1.0-20:
 
 * Added varSelection() to aid in variable selection. A plot function is 
@@ -12,7 +21,7 @@ imputation models and methods (or returns vectors of distances).
 projection pursuit from package ccaPP
 * Added ensembleImpute() to get an mean or median imputation for several
 separate imputations. Computes the mode for factors.
-* Added John Coulston as an author on some of the new functions.
+* Added John Coulston as an author on some of the new functions and the package.
 * Added bootstrap= option to yai() so that reference observations can 
 be sampled with replacement forming a bootstrap rep.
 * Added sampleVars= option to yai() so that X-, Y- or both kinds of variables
