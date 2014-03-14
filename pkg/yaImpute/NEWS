@@ -1,5 +1,6 @@
 Changes in version 1.0-21:
 
+* Added code to grmsd() so that it "runs" wiht single variables (ie, just one y from lm).
 * Added an argument to yai() that allows one to specify a different subset of X-variables
 for each Y-variable. 
 * Fixed a bug in reporting the results when method="randomForest" and the rfmethod="regression".
@@ -50,7 +51,7 @@ Changes in version 1.0-19:
 * Moved COPYRIGHTS to inst/COPYRIGHTS and greatly added detailed information 
 to the file.
 * Modified DESCRIPTION to note contribution of the authors of ANN (as per 
-CRAN policy).
+policy).
 * Added a Copyright statement to DESCRIPTION.  
 * Added detail to the Description statement in file DESCRIPTION.
 * Fixed print.yai.R error when there is only one target and K>1.
