@@ -152,7 +152,7 @@ AsciiGridImpute = function(object,xfiles,outfiles,xtypes=NULL,ancillaryData=NULL
    {
       for (lin in header)
       {
-         l = unlist(strsplit(lin,"[[:blank:]]"))
+         l = scan (text=lin,what="character",quiet=TRUE)
          if (toupper(l[1]) == tok) return (as.numeric(l[2]))
       }
       return (NA)
