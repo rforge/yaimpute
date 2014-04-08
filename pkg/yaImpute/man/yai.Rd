@@ -22,7 +22,8 @@
 \usage{
 yai(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
     nVec=NULL,pVal=.05,method="msn",ann=TRUE,mtry=NULL,ntree=500,
-    rfMode="buildClasses",bootstrap=FALSE,ppControl=NULL,sampleVars=NULL)
+    rfMode="buildClasses",bootstrap=FALSE,ppControl=NULL,sampleVars=NULL,
+    rfXsubsets=NULL)
 }
 
 \arguments{
@@ -63,9 +64,9 @@ yai(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
          (\code{\link[vegan]{cca}} from package \pkg{vegan}). 
          If \code{\link[vegan]{cca}} fails, \code{\link[vegan]{rda}} is used
          and a warning is issued.}
-      \item{\code{randomForest }}{distance is one minus the
-         proportion of \pkg{randomForest} trees where a target observation is in
-         the same terminal node as a reference observation (see \code{\link[randomForest]{randomForest}}).}
+      \item{\code{randomForest}}{distance is one minus the proportion of 
+         \pkg{randomForest} trees where a target observation is in the same terminal node 
+         as a reference observation (see \code{\link[randomForest]{randomForest}}).}
       \item{\code{random }}{like raw except that the X space is a single vector of uniform random [0,1]
          numbers generated using \code{\link[stats]{runif}}, results in random assignment of neighbors,
          and forces \code{ann} to be FALSE.}
@@ -92,6 +93,8 @@ yai(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
       the proportion of the number of variables. Values greater or equal to 1 are number of 
       variables to be included in the sample. Specification of a large number will cause the 
       sequence of variables to be randomized.}
+  \item{rfXsubsets}{a named list of character vectors where there is one vector for each
+      Y-variable, see details, only applies when \code{method="randomForest"}}
 }
 
 \details{
@@ -124,6 +127,14 @@ has two named components.
     \item{\code{search }}{If \code{"data"} or \code{"proj"}, then \code{\link[ccaPP]{ccaProj}} 
       is used, otherwise the default \code{\link[ccaPP]{ccaGrid}} is used.}
   }
+  
+Here are some details on argument \code{rfXsubsets}. When \code{method="randomForest"} 
+one call to \code{\link[randomForest]{randomForest}} is generated for for each Y-variable. When
+argument \code{rfXsubsets} is left \code{NULL}, all the X-variables are used for each of 
+the Y-variables. However, sometimes better results can be achieved by using specific subsets
+of X-variables for each Y-variable. This is done by setting \code{rfXsubsets} equal
+to a named list of character vectors. The names correspond to the Y-variable names and the
+character vectors hold the list of X-variables for the corresponding Y-variable. 
 }
 
 
@@ -201,7 +212,7 @@ mal <- yai(x=x,y=y,method="mahalanobis")
 grmsd(mal,msn)
 
 # use projection pursuit and specify ppControl (loads package ccaPP)
-if (require(ccaPP))
+if (require(ccaPP)) 
 {
   msnPP <- yai(x=x,y=y,method="msnPP",ppControl=c(method="kendall",search="proj"))
   grmsd(mal,msnPP,msn)
