@@ -45,7 +45,13 @@ impute.yai <- function (object,ancillaryData=NULL,method="closest",
                        vars=NULL,observed=TRUE,...)
 {
    # ======== predict functions used internally
-   findFactors =  get("findFactors",asNamespace("yaImpute"))
+   findFactors <-  get("findFactors",asNamespace("yaImpute"))
+
+   mywmean  <- function (x,w)
+   {
+     w = w*(1./sum(w))
+     sum(x*w)
+   }
 
    pred.c <- function (refs,ids,w=NULL,method="closest",k=1,vars,observed)
    {
@@ -73,7 +79,7 @@ impute.yai <- function (object,ancillaryData=NULL,method="closest",
          } 
          wei <- apply(w[,1:k],1,function (x) {x <- 1/(1+x); x <- x/sum(x)})
          ans <- lapply(rownames(ids),function(row)
-              apply(refs[ids[row, 1:k], vars, FALSE], 2, function (x) weighted.mean(x,wei[,row])))
+              apply(refs[ids[row, 1:k], vars, FALSE], 2, function (x) mywmean(x,wei[,row])))
          ans <- matrix(unlist(ans),nrow=length(ans),ncol=length(vars),byrow=TRUE)
          colnames(ans) <- vars
          ans <- data.frame(ans)
