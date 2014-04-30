@@ -1,5 +1,6 @@
 Changes in version 1.0-22:
-* Modified impute.yai to use a faster function than the base weighted.mean
+* Greatly improved the speed of impute.R, thanks to Bastien Ferland-Raymond who 
+pointed out the problem. 
 
 Changes in version 1.0-21:
 
