@@ -1,10 +1,11 @@
 Changes in version 1.0-22:
 * Greatly improved the speed of impute.R, thanks to Bastien Ferland-Raymond who 
 pointed out the problem. 
+* Fixed an error in AsciiGridImpute() pointed out by Nicolas PY.
+* Fixed an error in yai() concerning the specification of mtry when 
+method="randomForest", thanks to Guy Strickland.
 
 Changes in version 1.0-21:
-
-* Added code to grmsd() so that it "runs" wiht single variables (ie, just one y from lm).
 
 * Added code to grmsd() so that it "runs" wiht single variables (ie, just one y from lm).
 * Added an argument to yai() that allows one to specify a different subset of X-variables
