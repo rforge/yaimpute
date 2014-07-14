@@ -1,3 +1,6 @@
+Changes in version 1.0-23:
+* None yet
+
 Changes in version 1.0-22:
 * Greatly improved the speed of impute.R, thanks to Bastien Ferland-Raymond who 
 pointed out the problem. 
