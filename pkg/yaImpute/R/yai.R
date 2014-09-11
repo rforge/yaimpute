@@ -457,7 +457,7 @@ yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
       nVec = ncol(xRefs)
       if (!noTrgs && length(trgs) > 0)
       {
-         xTrgs=xall[trgs,,drop=FALSE]
+         xTrgs=xall[trgs,!xDrop,drop=FALSE] 
          xcvTrgs=scale(xTrgs,center=xScale$center,scale=xScale$scale)
       }
    }
@@ -493,7 +493,8 @@ yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
       {
          xTrgs=xall[trgs,,drop=FALSE]
          xcvTrgs=scale(xTrgs,center=xScale$center,scale=xScale$scale)
-         xcvTrgs=predict(ccaVegan,newdata=as.data.frame(xcvTrgs),type="lc",rank="full")
+         xcvTrgs=predict(ccaVegan,
+                 newdata=as.data.frame(xcvTrgs),type="lc",rank="full")
          xcvTrgs=xcvTrgs %*% diag(sqrt(ccaVegan$CCA$eig/sum(ccaVegan$CCA$eig)))
       }
       nVec = ncol(xcvRefs)
@@ -503,7 +504,8 @@ yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
       rfBuildClasses=NULL
       xTrgs=xall[trgs,1,drop=FALSE]
       rfVersion=packageDescription("randomForest")[["Version"]]  
-      if (compareVersion(rfVersion,"4.5-22") < 0) stop("Update your version of randomForest.")
+      if (compareVersion(rfVersion,"4.5-22") < 0) 
+          stop("Update your version of randomForest.")
       if (is.null(ntree)) ntree=500
       if (ydum)
       {

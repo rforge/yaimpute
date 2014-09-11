@@ -1,5 +1,8 @@
 Changes in version 1.0-23:
-* None yet
+* Fixed a bug in yai() that was revealed when bootstrapping. 
+Thanks to Jan Rombouts.
+* Enhanced AsciiGridImpute() to trim the number of files being read. 
+Thanks to Nicolas Py.
 
 Changes in version 1.0-22:
 * Greatly improved the speed of impute.R, thanks to Bastien Ferland-Raymond who 
