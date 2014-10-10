@@ -1,4 +1,5 @@
 Changes in version 1.0-23:
+* Fixed a bug in yai() when categorical predictors are used, reported by Nan Pond.
 * Fixed a bug in yai() that was revealed when bootstrapping. 
 Thanks to Jan Rombouts.
 * Enhanced AsciiGridImpute() to trim the number of files being read. 

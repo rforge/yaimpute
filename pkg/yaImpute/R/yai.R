@@ -763,9 +763,9 @@ yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
       {
          if (fa[i])
          {
-            k=k+1
-            xlevels[[k]]=levels(xRefs[,i])
-            names(xlevels)[[k]]=names(xRefs)[i]
+            kk=kk+1
+            xlevels[[kk]]=levels(xRefs[,i])
+            names(xlevels)[[kk]]=names(xRefs)[i]
          }
       }
    }
