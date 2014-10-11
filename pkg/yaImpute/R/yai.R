@@ -758,7 +758,7 @@ yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
    if (sum(fa)>0)
    {
       xlevels=vector(mode="list",length=sum(fa))
-      k=0
+      kk=0
       for (i in 1:length(fa))
       {
          if (fa[i])
