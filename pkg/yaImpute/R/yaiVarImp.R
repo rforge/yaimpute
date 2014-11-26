@@ -5,7 +5,12 @@ yaiVarImp = function(object, nTop=20, plot=TRUE, ...)
 {
    if (class(object) != "yai") stop ("arg must be of class yai")
    if (object$method != "randomForest") stop ("method must be randomForest")
-   if (!require (randomForest)) stop("install randomForest and try again")
+   if (!require (randomForest)) 
+   {
+     stop("install randomForest and try again")
+     # the purpose of this line of code is to suppress CRAN check notes
+     importance <- function (...) NULL
+   }
    scaledImportance = matrix(NA, nrow = length(names(object$ranForest)), 
       ncol=length(xvars(object)))
    colnames(scaledImportance) = xvars(object)
