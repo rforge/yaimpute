@@ -1,4 +1,6 @@
 Changes in version 1.0-23:
+* Added package parallel to the suggested list in DESCRIPTION, issue reported by
+CRAN checks.
 * Fixed a bug in yai() when categorical predictors are used, reported by Nan Pond.
 * Fixed a bug in yai() that was revealed when bootstrapping. 
 Thanks to Jan Rombouts.

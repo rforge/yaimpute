@@ -70,7 +70,6 @@ yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
    }
 
    #===============================================
-
    # ARGUMENT and DATA screening
 
    methodSet=c("msn","msn2","msnPP","mahalanobis","ica","euclidean","gnn",
