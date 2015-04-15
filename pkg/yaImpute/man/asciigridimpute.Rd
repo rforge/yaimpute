@@ -85,7 +85,7 @@ AsciiGridPredict(object,xfiles,outfiles,xtypes=NULL,lon=NULL,lat=NULL,
        second is a data frame of the new predictor variables created for each row
        of data from your input maps. If NULL, the generic
        \code{predict} function is called for \code{object}.}
-  \item{\dots}{passed to \code{myPredFunc} or \code{predict}.}
+  \item{\dots}{passed to \code{myPredFunc}, \code{predict}, or \code{impute}.}
 }
 
 \details{

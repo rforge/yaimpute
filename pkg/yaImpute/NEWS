@@ -1,3 +1,6 @@
+Changes in version 1.0-24:
+* Added the ability to pass ... to impute() it is called by AsciiGridImpute().
+
 Changes in version 1.0-23:
 * Added package parallel to the suggested list in DESCRIPTION, issue reported by
 CRAN checks.
