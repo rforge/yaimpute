@@ -1,5 +1,14 @@
 Changes in version 1.0-24:
 * Added the ability to pass ... to impute() it is called by AsciiGridImpute().
+* Made several changes to conform to the instructions regarding the use of 
+"requireNamespace" for "suggested" packages. 
+* Modified how reference observations are delt with when bootstrapping. 
+Now, a reference that has been selected more than once due to sampling with 
+replacement can not be used to represent itself unless options are used to 
+force that behavior. Prior to this change, a reference could be used to represent
+itself when it existed more than once in the bootstrap sample causing deflated
+error estimates. Thanks to Patrick Fekety for pointing the problem and doing
+most of the work that lead to a solution.
 
 Changes in version 1.0-23:
 * Added package parallel to the suggested list in DESCRIPTION, issue reported by
