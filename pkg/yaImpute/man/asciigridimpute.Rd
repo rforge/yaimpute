@@ -181,7 +181,8 @@ pLen <- matrix(iris[,3],10,15)
 pWid <- matrix(iris[,4],10,15)
 spcd <- matrix(as.numeric(iris[,5]),10,15)
 
-# Create and change to a temp directory.
+# Create and change to a temp directory. You can delete these steps
+# if you wish to keep the files in your working directory.
 curdir <- getwd()
 setwd(tempdir())
 cat ("Using working dir",getwd(),"\n")
