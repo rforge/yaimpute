@@ -111,6 +111,13 @@ function(object,xfiles,outfiles,xtypes=NULL,ancillaryData=NULL,
         colnames(allY) = toKeep
       }
    }
+   if (is.null(outLegend))
+   {
+     outLegend=vector("list",ncol(allY))
+     names(outLegend)=names(outfiles)
+     for (n in names(outLegend)) outLegend[[n]]=if (is.factor(allY[,n])) 
+       levels(allY[,n]) else NULL
+   }
 
 #  if using yai, deal with ann
 
@@ -314,8 +321,10 @@ function(object,xfiles,outfiles,xtypes=NULL,ancillaryData=NULL,
             omitted=c(omitted,moreOrigRowNames[as.vector(attr(newdata,"na.action"))])
          }
       }
-      else  attr(newdata,"illegalLevelCounts")=0   # tag the vector so newtargets() will not duplicate
-                                                   # the creation of this attribute data
+      # tag the vector so newtargets() will not duplicate
+      # the creation of this attribute data
+      else  attr(newdata,"illegalLevelCounts")=0   
+                                                  
 
       if (length(omitted)==length(origRowNames)) # all missing.
       {
@@ -345,11 +354,16 @@ function(object,xfiles,outfiles,xtypes=NULL,ancillaryData=NULL,
             saveNames=rownames(newdata)
             rownames(newdata)=paste("m",as.character(1:nrow(newdata)),sep="!")
             new = newtargets(object,newdata,k=NULL,ann=ann)
-            if (!is.null(allY)) outdata = impute(new,ancillaryData=allY,observed=FALSE,...)
-            rownames(outdata)=saveNames
-            if (distYes)  dists = data.frame(distance=new$neiDstTrgs[,1],row.names=rownames(newdata))
+            if (!is.null(allY)) 
+            {
+              outdata = impute(new,ancillaryData=allY,observed=FALSE,...)        
+              rownames(outdata)=saveNames
+            }
+            if (distYes)  dists = data.frame(distance=new$neiDstTrgs[,1],
+                                    row.names=rownames(newdata))
             else          dists = NULL
-            if (useidYes) useIds= data.frame(useid=match(new$neiIdsTrgs[,1],rownames(object$xRefs)),row.names=rownames(newdata))
+            if (useidYes) useIds= data.frame(useid=match(new$neiIdsTrgs[,1],
+                                    rownames(object$xRefs)),row.names=rownames(newdata))
             else          useIds= NULL
             if (!is.null(outdata) && !is.null(dists) ) outdata=cbind(outdata,dists)
             else if (is.null(outdata)) outdata=dists
@@ -366,12 +380,7 @@ function(object,xfiles,outfiles,xtypes=NULL,ancillaryData=NULL,
                if (!is.null(cns)) colnames(outdata) = cns
             } else rownames(outdata)=rownames(newdata)               
          }
-         if (is.null(outLegend))
-         {
-           outLegend=vector("list",ncol(outdata))
-           names(outLegend)=names(outdata)
-           for (n in names(outLegend)) outLegend[[n]]=if (is.factor(outdata[,n])) levels(outdata[,n]) else NULL
-         }                    
+           
          if (nrow(outdata) != nrow(newdata))
          {
             cat ("First six lines non-missing predictions for row ",ir,"\n")
@@ -381,6 +390,9 @@ function(object,xfiles,outfiles,xtypes=NULL,ancillaryData=NULL,
             flush.console()
             stop ("Unexpected results for row = ",ir)
          }
+         #convert factors to numbers that match the outLegend
+         for (n in colnames(outdata)) if (is.factor(outdata[,n]))
+           outdata[,n] <- match(levels(outdata[,n])[outdata[,n]],outLegend[[n]])
          outrs = nrow(outdata) # the predict might send NA's, change them to no data
          outtmp = na.omit(outdata)
          if (outrs > nrow(outtmp))
@@ -392,7 +404,6 @@ function(object,xfiles,outfiles,xtypes=NULL,ancillaryData=NULL,
          if (length(omitted)>0)
          {
             # add omitted observations back into data frame in the proper location
-
             more = data.frame(matrix(nodout,length(omitted),length(names(outdata))),
                               row.names=omitted)
             names(more)=names(outdata)
