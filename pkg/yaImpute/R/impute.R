@@ -104,7 +104,7 @@ impute.yai <- function (object,ancillaryData=NULL,method="closest",
    }
    pred.f <- function (refs,ids,w=NULL,method="closest",k=1,vars,observed)   
    {
-      if (is.null(vars)) vars <- colnasourmes(refs)
+      if (is.null(vars)) vars <- colnames(refs)
       else vars <- intersect(vars,colnames(refs))
       if (is.null(vars) | length(vars)==0) return (NULL)
 
