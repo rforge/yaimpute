@@ -1,4 +1,7 @@
 Changes in version 1.0-24:
+* Fixed error in AsciiGridImpute insuring that factors are correctly output
+and that the legend is accurate.
+* Fixed url to citation thanks to RForge checks!
 * Added the ability to pass ... to impute() it is called by AsciiGridImpute().
 * Made several changes to conform to the instructions regarding the use of 
 "requireNamespace" for "suggested" packages. 
