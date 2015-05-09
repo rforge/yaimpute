@@ -1,4 +1,6 @@
 Changes in version 1.0-24:
+* Changed package title to comply with CRAN rules
+* Changed require to requireNamespace to errorstats.R
 * Fixed error in AsciiGridImpute insuring that factors are correctly output
 and that the legend is accurate.
 * Fixed url to a citation thanks to RForge checks!
