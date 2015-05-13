@@ -1,4 +1,7 @@
 Changes in version 1.0-24:
+
+* Changed the examples for several functions so that they run even when dependent
+packages are not present.
 * Changed package title to comply with CRAN rules
 * Changed require to requireNamespace to errorstats.R
 * Fixed error in AsciiGridImpute insuring that factors are correctly output
@@ -16,8 +19,9 @@ error estimates. Thanks to Patrick Fekety for pointing the problem and doing
 most of the work that lead to a solution.
 
 Changes in version 1.0-23:
+
 * Added package parallel to the suggested list in DESCRIPTION, issue reported by
-CRAN checks.
+RForge checks.
 * Fixed a bug in yai() when categorical predictors are used, reported by Nan Pond.
 * Fixed a bug in yai() that was revealed when bootstrapping. 
 Thanks to Jan Rombouts.
@@ -25,6 +29,7 @@ Thanks to Jan Rombouts.
 Thanks to Nicolas Py.
 
 Changes in version 1.0-22:
+
 * Greatly improved the speed of impute.R, thanks to Bastien Ferland-Raymond who 
 pointed out the problem. 
 * Fixed an error in AsciiGridImpute() pointed out by Nicolas PY.
