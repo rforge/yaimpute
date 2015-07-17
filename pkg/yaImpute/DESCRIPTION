@@ -7,6 +7,7 @@ Copyright: ANN library is copyright University of Maryland and Sunil Arya and
  David Mount. See file COPYRIGHTS for details.
 Maintainer: Nicholas L. Crookston <ncrookston.fs@gmail.com>
 Depends: R (>= 2.11.0)
+Imports: datasets, grDevices, graphics, stats, utils
 Suggests: vegan, ccaPP, randomForest, gam, fastICA, parallel
 NeedsCompilation: yes
 Description: Performs nearest neighbor-based imputation using one or more alternative 
