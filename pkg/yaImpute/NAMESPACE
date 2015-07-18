@@ -37,8 +37,8 @@ yvars)
 
 importFrom(grDevices, gray, nclass.Sturges)
 importFrom(utils, compareVersion, flush.console, head, 
-           packageDescription, data)
-import(graphics, stats, datasets)
+           packageDescription)
+import(graphics, stats)
 
 S3method(impute, yai)
 S3method(plot, compare.yai)
