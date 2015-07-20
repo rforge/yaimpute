@@ -1,4 +1,4 @@
-Changes in version 1.0-25:
+Changes in version 1.0-25 and 1.0-26:
 
 * Added import directives to meet recent CRAN rules that say that functions 
 from default packages other than base which are used in the package
