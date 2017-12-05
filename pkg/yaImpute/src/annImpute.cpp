@@ -13,7 +13,7 @@ using namespace std;
 
 extern "C" {
 
-  SEXP ann(SEXP args)
+  SEXP annf(SEXP args)
   {
     SEXP ref, refDims, target, tarDims, knnIndxDistMtrx;
     int nProtect = 0;

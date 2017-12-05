@@ -1,5 +1,6 @@
 Changes in version 1.0-27:
 
+* Added RegisteredNativeSymbol usage according to best practices
 * Fixed an error in yai() when it is called by varSelection() using 
 yaiMethod="randomForest", thanks to Andrew Haywood.
 
