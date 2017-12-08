@@ -1,17 +1,17 @@
 Package: yaImpute
-Version: 1.0-27
-Date: 2017-12-05
+Version: 1.0-28
+Date: 2017-12-08
 Title: Nearest Neighbor Observation Imputation and Evaluation Tools
 Author: Nicholas L. Crookston, Andrew O. Finley, John Coulston (Sunil Arya and David Mount for ANN)
 Copyright: ANN library is copyright University of Maryland and Sunil Arya and 
  David Mount. See file COPYRIGHTS for details.
 Maintainer: Nicholas L. Crookston <ncrookston.fs@gmail.com>
-Depends: R (>= 2.11.0)
+Depends: R (>= 3.0.0)
 Imports: grDevices, graphics, stats, utils
 Suggests: vegan, ccaPP, randomForest, gam, fastICA, parallel
 NeedsCompilation: yes
 Description: Performs nearest neighbor-based imputation using one or more alternative 
- approaches to processing multivariate data. These include methods based on canonical 
+ approaches to proc:essing multivariate data. These include methods based on canonical 
  correlation analysis, canonical correspondence analysis, and a multivariate adaptation 
  of the random forest classification and regression techniques of Leo Breiman and Adele 
  Cutler. Additional methods are also offered. The package includes functions for 
