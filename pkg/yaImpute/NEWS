@@ -1,4 +1,4 @@
-Changes in version 1.0-27 and 1.0-28:
+Changes in version 1.0-27 and 1.0-29:
 
 * Addressed an issue in the ann source code (likely a false positive) found 
 by rchk at CRAN.

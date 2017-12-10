@@ -11,7 +11,7 @@ Imports: grDevices, graphics, stats, utils
 Suggests: vegan, ccaPP, randomForest, gam, fastICA, parallel
 NeedsCompilation: yes
 Description: Performs nearest neighbor-based imputation using one or more alternative 
- approaches to proc:essing multivariate data. These include methods based on canonical 
+ approaches to processing multivariate data. These include methods based on canonical 
  correlation analysis, canonical correspondence analysis, and a multivariate adaptation 
  of the random forest classification and regression techniques of Leo Breiman and Adele 
  Cutler. Additional methods are also offered. The package includes functions for 
