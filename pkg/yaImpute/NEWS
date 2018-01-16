@@ -1,6 +1,9 @@
 Changes in version 1.0-30:
 
 * Removed the c++ "register" keyword from the ann sources as requested by CRAN.
+* Added method="gower" for gower distance that allows categorical variables in 
+the X data (the Y data are ignored, analogous to method="raw" where the relationship
+between the X and Y data are not relevant).
 
 Changes in version 1.0-27 and 1.0-29:
 
