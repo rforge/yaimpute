@@ -238,12 +238,19 @@ y <- MoscowMtStJoe[,1:35]
 
 msn <- yai(x=x, y=y, method="msn", k=1)
 mal <- yai(x=x, y=y, method="mahalanobis", k=1)
-gow <- yai(x=x, y=y, method="gower", k=1)
 # the results can be plotted.
 plot(mal,vars=yvars(mal)[1:16])
 
 # compare these results using the generalized mean distances..
-grmsd(mal,msn,gow)
+grmsd(mal,msn)
+
+# try method="gower"
+if (require(gower))
+{
+  gow <- yai(x=x, y=y, method="gower", k=1)
+  # compare these results using the generalized mean distances..
+  grmsd(mal,msn,gow)
+}
 
 # try method="randomForest"
 if (require(randomForest))
@@ -259,7 +266,7 @@ if (require(randomForest))
   
   # compare the results using individual rmsd's
   compare.yai(mal,msn,rforig)
-  plot(compare.yai(mal,msn,rforig,gow))
+  plot(compare.yai(mal,msn,rforig))
   
   # build another randomForest case forcing regression
   # to be used for continuous variables. The answers differ
