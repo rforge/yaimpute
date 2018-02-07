@@ -159,7 +159,7 @@ yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
            if (length(y) == nrow (x)) y=data.frame(y,row.names=rownames(x), 
                                                    stringsAsFactors = TRUE)
            else stop(paste0("when formulas are not used,",
-                     " y must be a matrix or dataframe,",
+                     " y must be a matrix, dataframe,",
                      " or a vector the same length of rows in x"))
          } 
          if (is.matrix(y) | is.data.frame(y))
@@ -183,7 +183,7 @@ yai <- function(x=NULL,y=NULL,data=NULL,k=1,noTrgs=FALSE,noRefs=FALSE,
       if (length(obsDropped)) warning (length(obsDropped)," observation(s) removed")
       theFormula=list(x=x,y=y)
    }
-   else stop ("x is missing or not a matrix nor dataframe")
+   else stop ("x is missing or not a matrix or a dataframe")
    if (is.null(yall) & (method %in% c("mahalanobis","ica",
                         "euclidean","randomForest","raw","gower")))
    {
