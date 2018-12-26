@@ -1,6 +1,6 @@
 Package: yaImpute
-Version: 1.0-30
-Date: 2018-07-21
+Version: 1.0-31
+Date: 2018-12-26
 Title: Nearest Neighbor Observation Imputation and Evaluation Tools
 Author: Nicholas L. Crookston, Andrew O. Finley, John Coulston (Sunil Arya and David Mount for ANN)
 Copyright: ANN library is copyright University of Maryland and Sunil Arya and 
