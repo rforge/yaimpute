@@ -1,10 +1,10 @@
 Package: yaImpute
-Version: 1.0-31
-Date: 2018-12-26
+Version: 1.0-32
+Date: 2020-02-13
 Title: Nearest Neighbor Observation Imputation and Evaluation Tools
 Author: Nicholas L. Crookston, Andrew O. Finley, John Coulston (Sunil Arya and David Mount for ANN)
-Copyright: ANN library is copyright University of Maryland and Sunil Arya and 
- David Mount. See file COPYRIGHTS for details.
+Copyright: ANN library is copyright University of Maryland and Sunil
+        Arya and David Mount. See file COPYRIGHTS for details.
 Maintainer: Nicholas L. Crookston <ncrookston.fs@gmail.com>
 Depends: R (>= 3.0.0)
 Imports: grDevices, graphics, stats, utils
@@ -19,4 +19,3 @@ Description: Performs nearest neighbor-based imputation using one or more altern
  that are notably distant from reference observations, detecting and correcting 
  for bias, bootstrapping and building ensemble imputations, and mapping results.
 License: GPL (>= 2)
-

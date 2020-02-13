@@ -1,7 +1,13 @@
+Changes in version 1.0-32:
+
+* Corrected the interface information in yaImpute_init.c so that it matches
+the actual arguments of rfoneprox. Thanks to Prof Ripley for finding the error.
+
 Changes in version 1.0-31:
 
 * Changed a variable name in one of the ANN routines so that the code can 
-compile on Solaris. Removed an unused variable in the ANN routines.
+compile on Solaris. Removed an unused variable in the ANN routines. Thanks to 
+Prof Ripley for finding the error.
 
 Changes in version 1.0-30:
 
