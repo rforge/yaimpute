@@ -1,3 +1,8 @@
+Changes in version 1.0-33:
+
+* Added code in newtargets() that changes "newdata" to a dataframe if 
+it isn't one on input (thanks to Caio Hamamura for the suggestion).
+
 Changes in version 1.0-32:
 
 * Corrected the interface information in yaImpute_init.c so that it matches

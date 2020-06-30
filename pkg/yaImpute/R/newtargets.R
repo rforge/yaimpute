@@ -78,7 +78,8 @@ newtargets=function(object,newdata,k=NULL,ann=NULL)
           missing = setdiff(colnames(object$xRefs),colnames(newdata))     
           stop(paste("required column(s) missing:", paste (missing, collapse=", ")))
       }
-      xall=na.omit(newdata[,have])
+      xall=na.omit(as.data.frame(newdata[,have]))
+      colnames(xall) = have
       obsDropped=names(attributes(na.omit(xall))$na.action)
       if (length(obsDropped)>0) warning (nrow(newdata)-nrow(xall)," observation(s) removed")
    }
